@@ -11,7 +11,6 @@ class bruger {
 
     // Klassens constructor.
     function __construct($studienr) {
-        //require_once("db_connect.php"); // Forbinder til databasen.
         include("db_connect.php"); // Forbinder til databasen.
         $this->studienr = $studienr;
         $sqli = "SELECT * FROM `users` WHERE studienr=('$studienr')";
@@ -25,14 +24,11 @@ class bruger {
         $this->email = $data['email'];
     }
 
-    function addpoint($points) {
+    function addpoint($points, $aktivitet, $kommentar) {
         include("db_connect.php"); // Forbinder til databasen.
         $this->point = $this->point+$points;
         $sqli = "UPDATE `users` SET point=('$this->point') WHERE studienr=('$this->studienr')";
         $result = mysqli_query($db, $sqli);
-
-        $aktivitet = "";
-        $kommentar = "";
         $dato = date('d/m/Y');
 
         $insertSQL = "INSERT INTO `$this->studienr` (`aktivitet`, `point`, `kommentar`, `dato`) 
@@ -48,10 +44,62 @@ class bruger {
                 `dato` VARCHAR(255) NOT NULL
             );";
             $result = mysqli_query($db, $tableSQL);
+            $result = mysqli_query($db, $insertSQL);
             console_log($db -> error);
-        } 
-        
+        }
+    }
 
+        function fremmødt() {
+            include("db_connect.php"); // Forbinder til databasen.
+
+            $dato = date('d/m/Y');
+
+            $sqli = "SELECT * FROM `$this->studienr` WHERE (dato=('$dato') AND aktivitet=('studierådsmøde'))";
+            $result = mysqli_query($db, $sqli);
+            $data= mysqli_fetch_array($result);
+            console_log($data);
+            if ($data == NULL){
+
+                $points = 1;
+                $this->point = $this->point+$points;
+                $sqli = "UPDATE `users` SET point=('$this->point') WHERE studienr=('$this->studienr')";
+                $result = mysqli_query($db, $sqli);
+
+                $kommentar = "Fremmødt";
+                $aktivitet = "studierådsmøde";
+        
+                $insertSQL = "INSERT INTO `$this->studienr` (`aktivitet`, `point`, `kommentar`, `dato`) 
+                VALUES ('$aktivitet', '$points', '$kommentar' , '$dato')";
+                $result = mysqli_query($db, $insertSQL);
+        
+                if(!$result){
+                    $tableSQL = "CREATE TABLE `$this->studienr`(
+                        `point_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                        `aktivitet` VARCHAR(255) NOT NULL,
+                        `point` VARCHAR(255) NOT NULL,
+                        `kommentar` VARCHAR(255) NOT NULL,
+                        `dato` VARCHAR(255) NOT NULL
+                    );";
+                    $result = mysqli_query($db, $tableSQL);
+                    $result = mysqli_query($db, $insertSQL);
+                    console_log($db -> error);
+                } 
+        
+             }
+        }
+    
+    function update(){
+        include("db_connect.php"); // Forbinder til databasen.
+        $sql="SELECT sum(`point`) as total FROM `$this->studienr`";
+
+        $result = mysqli_query($db, $sql);
+
+        while ($row = mysqli_fetch_assoc($result))
+        { 
+        $this->point = $row['total'];
+        }
+        $sqli = "UPDATE `users` SET point=('$this->point') WHERE studienr=('$this->studienr')";
+        $result = mysqli_query($db, $sqli);
 
     }
 
