@@ -12,7 +12,14 @@ CREATE TABLE `users`(
     `navn` VARCHAR(255) NOT NULL,
     `email` VARCHAR(255) NOT NULL,
     `telefonnr` INT NOT NULL,
-    `point` VARCHAR(255) NOT NULL
+    `point` VARCHAR(255) NOT NULL,
+    `card_id` VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE `card_data`(
+    `entry_nr` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `card_id` VARCHAR(255) NOT NULL,
+    `studienr` VARCHAR(255) NOT NULL
 );
 
 
