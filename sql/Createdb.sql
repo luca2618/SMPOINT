@@ -22,6 +22,13 @@ CREATE TABLE `card_data`(
     `studienr` VARCHAR(255) NOT NULL
 );
 
+CREATE TABLE `rådsmøde`(
+    `møde_nr` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `dato` VARCHAR(255) NOT NULL,
+    `kode` VARCHAR(255) NOT NULL,
+    `opretter` VARCHAR(255) NOT NULL
+);
+
 
 INSERT INTO `users`( `studienr`, `navn`, `email`, `telefonnr`, `point`) VALUES (
     's214636',
