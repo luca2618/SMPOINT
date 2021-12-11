@@ -3,7 +3,7 @@
 $request = $_SERVER['REQUEST_URI'];
 echo($request);echo("<br>");
 switch ($request) {
-    case '/smkid%20point/' :
+    case '' :
         require __DIR__ . '/main.php';
         break;
     case '/smkid%20point/addpoint/' :
