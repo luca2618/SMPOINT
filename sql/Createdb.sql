@@ -17,7 +17,7 @@ CREATE TABLE `users`(
 );
 
 CREATE TABLE `card_data`(
-    `entry_nr` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `entry_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `card_id` VARCHAR(255) NOT NULL,
     `studienr` VARCHAR(255) NOT NULL
 );

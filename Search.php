@@ -1,29 +1,26 @@
-<style>
-table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
-}
 
-td, th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-}
 
-tr:nth-child(even) {
-  background-color: #dddddd;
-}
-</style>
+<head>
+        <link rel="stylesheet" href="./style/Stylesheet.css">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Home</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" defer></script> <!-- Tilføjer javascript-library "jqeury" -->
+</head>
+
+
+<?php 
+include("./navbar/Navbar.php"); // Indkluderer navbar.
+
+?>
 
 <form action="" method="post">
   <label for="fname">Studienr:</label>
   <input type="text" id="studienr" name="studienr"><br><br>
-  <input type="submit" value="Submit">
+  <input type="submit" value="Search">
   </form>
 
 <?php
-
 
 
 if (isset($_POST['studienr'])){
@@ -31,8 +28,15 @@ if (isset($_POST['studienr'])){
     include("user_class.php");
     include("db_connect.php"); // Forbinder til databasen.
 
-    $sqli = "SELECT * FROM `$studienrS`";
+    #get all aktivities by id ascending order
+    $sqli = "SELECT * FROM `$studienrS` ORDER BY `point_id` DESC";
     $result = mysqli_query($db, $sqli);
+
+    $person = new bruger($studienrS);
+    $total = $person->point;
+
+    echo("Total points:");
+    echo($total);
 
     if ($result != False){
       if ($result->num_rows > 0)  {

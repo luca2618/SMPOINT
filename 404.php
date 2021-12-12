@@ -1,3 +1,3 @@
 <?php
 
-echo("cant find this page");
+echo("Error 404, cant find this page");

@@ -1,4 +1,16 @@
+<head>
+        <link rel="stylesheet" href="./style/Stylesheet.css">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Home</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" defer></script> <!-- Tilføjer javascript-library "jqeury" -->
+</head>
 
+
+
+<?php 
+include("./navbar/Navbar.php"); // Indkluderer navbar.
+?>
 
 <form action="" method="post">
   <label for="fname">Studienr:</label>
@@ -24,7 +36,6 @@ include("user_class.php");
 include("db_connect.php");
 
 if (isset($_POST['password'])){
-    
     $pass_hash = hash('md5',$_POST['password']);
     console_log($pass_hash);
     //compare hash with password
@@ -42,6 +53,10 @@ if (isset($_POST['password'])){
         $kommentar = $_POST['kommentar'];
         
         $user = new bruger($studienr);
+        $points = trim($points);
+        if (! (is_numeric($points))){
+            exit("Error:non integer point value!");
+        }
 
         //checker om brugeren er fremmødt til studierådsmøde
         if (strcasecmp($aktivitet, "studierådsmøde") == 0){
