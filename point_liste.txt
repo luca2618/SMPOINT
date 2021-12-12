@@ -1,0 +1,30 @@
+Aktivitet,Point,Forklaring
+Referant,1,Referant til et studierådsmøde
+Kage,1,Kage til et studierådsmøde
+Madlavning,1.5,Madlavning til et studierådsmøde
+Opvask,1,Opvask efter studierådsmøde
+Årlig køkkenrengøring,1,Den årlige køkkenrengøring med de andre råd
+Fællesrådet,3,Sidde i FR
+Fagligudvalget,2,Sidde i Fagligudvalget
+Socialpolitisk udvalg,2,Sidde i Socialpolitisk udvalg
+ISN,2,Sidde i ISN
+Følgegruppe,2,Sidde i eksempelvis MatTek følgegruppe
+Formand,4,Formand for S/M-KID Rådet
+Økonomiansvarlig,3,Økonomiansvarlig for S/M-KID Rådet
+Studiecaféudvalget,2,Medlem af Studiecaféudvalget
+Afdeling 27,2,Medlem af Afdeling 27
+PR,1.5,Medlem af S/M-KIDs PR hold
+Sensommerfest,5,Arrangør af Sensommerfest
+Julefrokost,4,Arrangør af S/M-KID Julefrokost
+Påskefrokost,2,Arrangør af Påskefrokost
+Compute Sommerfest,2,Arrangør af Compute Sommerfest
+Pigemiddag,3,Arrangør af Pigemiddag
+Fællesrådet (suppleant),1,Suppleant til FR
+ISN (suppleant),1,Suppleant til ISN
+YY,2,S/M-KID UdlejningsUdvalg (YY)
+Hyttetur,3,S/M-KID Rådets årlige hyttetur
+Afspritning efter møde,0.25,Afspritning efter rådsmøde
+Gøre klar til møde,0.25,"Dele mad ud, spritte af inden møde, etc. etc."
+Hjalp til med studiecafé,0.5,"Enten TA, bage kage eller hjælpe til"
+Digitalisering Gruppe,1,DTU's digitaliseringsgruppe - what do I know
+Studiecaféansvarlig,4,Ansvarlig for den ugentlige studiecafé

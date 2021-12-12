@@ -4,27 +4,117 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Home</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" defer></script> <!-- Tilføjer javascript-library "jqeury" -->
+        <script src="https://requirejs.org/docs/release/2.3.5/minified/require.js" defer></script>
 </head>
 
-
-
-<?php 
+<?php
+$myfile = fopen("point_liste.txt", "r");
+$txt = fread($myfile,filesize("point_liste.txt"));
+fclose($myfile);
 include("./navbar/Navbar.php"); // Indkluderer navbar.
 ?>
 
+<script>
+            // Funktion der ændrer layoutet på siden, hver gang man ændrer aktiviteten.
+            function changeform(){
+                var aktivitet = document.getElementById('aktivitet').value;
+                var txt = <?php echo json_encode($txt); ?>;
+                var prefill_elements = document.getElementsByClassName("prefill");
+
+                aktivitet_values_array = csvToArray(txt);
+                
+                var hide = false;
+                
+                for (aktivitet_index in aktivitet_values_array){
+                    
+                    //console.log(aktivitet_values_array[aktivitet_index]["Aktivitet"]);
+                    if (aktivitet === aktivitet_values_array[aktivitet_index]["Aktivitet"]) {
+                        hide =true;
+                    }
+
+                    
+
+                }
+
+                if (hide != true){
+                        for (i = 0; i < prefill_elements.length; i++) {
+                            prefill_elements[i].style.display = "inline";
+                        }
+                    }
+                    else 
+                    {
+                        for (i = 0; i < prefill_elements.length; i++) {
+                            prefill_elements[i].style.display = "none";
+                        }
+                    }
+
+                
+
+            }
+
+            function csvToArray(str) {
+                delimiter = ","
+                //https://sebhastian.com/javascript-csv-to-array/
+                // slice from start of text to the first \n index
+                // use split to create an array from string by delimiter
+                const headers = str.slice(0, str.indexOf("\n")).split(delimiter);
+
+                // slice from \n index + 1 to the end of the text
+                // use split to create an array of each csv value row
+                const rows = str.slice(str.indexOf("\n") + 1).split("\n");
+
+                // Map the rows
+                // split values from each row into an array
+                // use headers.reduce to create an object
+                // object properties derived from headers:values
+                // the object passed as an element of the array
+                const arr = rows.map(function (row) {
+                    const values = row.split(delimiter);
+                    const el = headers.reduce(function (object, header, index) {
+                    object[header] = values[index];
+                    return object;
+                    }, {});
+                    return el;
+                });
+
+                // return the array
+                return arr;
+                }
+            </script>
+
+
+
 <form action="" method="post">
-  <label for="fname">Studienr:</label>
+  <label for="studienr">Studienr:</label>
   <input type="text" id="studienr" name="studienr" required><br><br>
-  <label for="fname">Aktivitet:</label>
-  <input type="text" id="aktivitet" name="aktivitet" required><br><br>
-  <label for="fname">Kommentar:</label>
-  <input type="text" id="kommentar" name="kommentar"><br><br>
-  <label for="fname">Points:</label>
-  <input type="text" id="points" name="points" required><br><br>
-  <label for="fname">Password:</label>
+
+  <label for="aktivitet">Aktivitet:</label>
+  <input list="aktivitets_list" id="aktivitet" name="aktivitet" required autocomplete="off" onkeyup="changeform();"><br><br>
+  <datalist id="aktivitets_list">
+  <option value="Studierådsmøde">
+  <option value="Referant">
+  </datalist>
+
+  <label for="kommentar" class="prefill">Kommentar:</label>
+  <input type="text" id="kommentar" name="kommentar" class="prefill"><br class="prefill"><br class="prefill">
+
+  <label for="points" class="prefill">Points:</label>
+  <input type="text" id="points" name="points" required autocomplete="off" class="prefill"><br class="prefill"><br class="prefill">
+
+  <label for="password">Password:</label>
   <input type="password" id="password" name="password" required><br><br>
+
   <input type="submit" value="Submit">
   </form>
+
+
+
+
+
+
+
+
+
 
 <?php
 //inputs
