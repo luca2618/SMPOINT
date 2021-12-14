@@ -6,36 +6,43 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" defer></script> <!-- Tilføjer javascript-library "jqeury" -->
         <script src="https://requirejs.org/docs/release/2.3.5/minified/require.js" defer></script>
 </head>
-
 <?php
-$myfile = fopen("point_liste.txt", "r");
-$txt = fread($myfile,filesize("point_liste.txt"));
-fclose($myfile);
+
 include("./navbar/Navbar.php"); // Indkluderer navbar.
+include("user_class.php");
+
+$csv = array();
+$file = fopen('point_liste.csv', 'r');
+
+while (($result = fgetcsv($file)) !== false)
+{
+    $csv[] = $result;
+}
+array_shift($csv);
+fclose($file);
+
 ?>
 
+<br> </br>
 <script>
             // Funktion der ændrer layoutet på siden, hver gang man ændrer aktiviteten.
             function changeform(){
                 var aktivitet = document.getElementById('aktivitet').value;
-                var txt = <?php echo json_encode($txt); ?>;
+                var csv = <?php echo json_encode($csv); ?>;
                 var prefill_elements = document.getElementsByClassName("prefill");
-
-                aktivitet_values_array = csvToArray(txt);
-                
                 var hide = false;
                 
-                for (aktivitet_index in aktivitet_values_array){
-                    
+                for (i in csv){
                     //console.log(aktivitet_values_array[aktivitet_index]["Aktivitet"]);
-                    if (aktivitet === aktivitet_values_array[aktivitet_index]["Aktivitet"]) {
+                    if (aktivitet === csv[i][0]) {
                         hide =true;
+                        document.getElementById("points").value = csv[i][1];
+                        document.getElementById("kommentar").value = csv[i][2];
                     }
 
-                    
-
                 }
-
+                //This if statement hides alle the prefilled
+                /*
                 if (hide != true){
                         for (i = 0; i < prefill_elements.length; i++) {
                             prefill_elements[i].style.display = "inline";
@@ -46,65 +53,58 @@ include("./navbar/Navbar.php"); // Indkluderer navbar.
                         for (i = 0; i < prefill_elements.length; i++) {
                             prefill_elements[i].style.display = "none";
                         }
-                    }
+                    }*/
 
                 
 
             }
-
-            function csvToArray(str) {
-                delimiter = ","
-                //https://sebhastian.com/javascript-csv-to-array/
-                // slice from start of text to the first \n index
-                // use split to create an array from string by delimiter
-                const headers = str.slice(0, str.indexOf("\n")).split(delimiter);
-
-                // slice from \n index + 1 to the end of the text
-                // use split to create an array of each csv value row
-                const rows = str.slice(str.indexOf("\n") + 1).split("\n");
-
-                // Map the rows
-                // split values from each row into an array
-                // use headers.reduce to create an object
-                // object properties derived from headers:values
-                // the object passed as an element of the array
-                const arr = rows.map(function (row) {
-                    const values = row.split(delimiter);
-                    const el = headers.reduce(function (object, header, index) {
-                    object[header] = values[index];
-                    return object;
-                    }, {});
-                    return el;
-                });
-
-                // return the array
-                return arr;
-                }
             </script>
 
 
 
-<form action="" method="post">
-  <label for="studienr">Studienr:</label>
-  <input type="text" id="studienr" name="studienr" required><br><br>
+<form action="" method="post" class="form">
 
-  <label for="aktivitet">Aktivitet:</label>
-  <input list="aktivitets_list" id="aktivitet" name="aktivitet" required autocomplete="off" onkeyup="changeform();"><br><br>
+<div class="input-container ic1">
+  <input type="text" id="studienr" name="studienr" required class="input" placeholder=" "><br><br>
+  <div class="cut"></div>
+  <label for="studienr" class="placeholder">Studienr:</label>
+</div>
+
+<div class="input-container ic1">
+  
+  <input list="aktivitets_list" id="aktivitet" name="aktivitet" required autocomplete="off" onkeyup="changeform();" class="input" placeholder=" "><br><br>
+  <div class="cut"></div>
   <datalist id="aktivitets_list">
-  <option value="Studierådsmøde">
-  <option value="Referant">
+  <?php
+  foreach ($csv as $value){
+    echo("<option value=");
+    echo($value[0]);
+    echo(">");
+  }
+  ?>
   </datalist>
 
-  <label for="kommentar" class="prefill">Kommentar:</label>
-  <input type="text" id="kommentar" name="kommentar" class="prefill"><br class="prefill"><br class="prefill">
+  <label for="aktivitet" class="placeholder">Aktivitet:</label>
+</div>
 
-  <label for="points" class="prefill">Points:</label>
-  <input type="text" id="points" name="points" required autocomplete="off" class="prefill"><br class="prefill"><br class="prefill">
+<div class="input-container ic1">
+    <input type="text" id="kommentar" name="kommentar" class="prefill input" placeholder=" ">
+    <div class="cut"></div>
+    <label for="kommentar" class="prefill placeholder">Kommentar:</label>
+</div>
 
-  <label for="password">Password:</label>
-  <input type="password" id="password" name="password" required><br><br>
+<div class="input-container ic1">
+  <input type="text" id="points" name="points" required autocomplete="off" class="prefill input" placeholder=" "><br class="prefill"><br class="prefill">
+  <div class="cut"></div>
+  <label for="points" class="prefill placeholder">Points:</label>
+</div>
 
-  <input type="submit" value="Submit">
+<div class="input-container ic1">
+  <input type="password" id="password" name="password" required class="input" placeholder=" "><br><br>
+  <div class="cut"></div>
+  <label for="password" class="placeholder">Password:</label>
+</div>
+  <input type="submit" value="Submit" class="submit">
   </form>
 
 
@@ -122,7 +122,6 @@ include("./navbar/Navbar.php"); // Indkluderer navbar.
 // aktivitet (aktivitet deltaget i)
 // is used of studie nr is not set card_id - used to identify student/studentnr
 
-include("user_class.php");
 include("db_connect.php");
 
 if (isset($_POST['password'])){

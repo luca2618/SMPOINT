@@ -9,13 +9,13 @@ require_once("{$_SERVER['DOCUMENT_ROOT']}/router.php");
 // Static GET
 // In the URL -> http://localhost
 // The output -> Index
-get('/', 'main.php');
-get('', 'main.php');
+get('/', 'home.php');
+get('', 'home.php');
 
-get('/search', 'search.php');
-post('/search', 'search.php');
+any('/search', 'search.php');
 
-get('/addpoint', 'addpoint.php');
-post('/addpoint', 'addpoint.php');
+any('/addpoint', 'addpoint.php');
+
+get('/leaderboard','leaderboard.php');
 
 any('/404','404.php');

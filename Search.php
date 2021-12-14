@@ -13,7 +13,7 @@
 include("./navbar/Navbar.php"); // Indkluderer navbar.
 
 ?>
-
+<br> </br>
 <form action="" method="post">
   <label for="fname">Studienr:</label>
   <input type="text" id="studienr" name="studienr"><br><br>
@@ -24,16 +24,19 @@ include("./navbar/Navbar.php"); // Indkluderer navbar.
 
 
 if (isset($_POST['studienr'])){
-    $studienrS = $_POST['studienr'];
+    $studienr = $_POST['studienr'];
     include("user_class.php");
     include("db_connect.php"); // Forbinder til databasen.
 
+    $person = new bruger($studienr);
+    $total = $person->point;
+
     #get all aktivities by id ascending order
-    $sqli = "SELECT * FROM `$studienrS` ORDER BY `point_id` DESC";
+
+    $sqli = "SELECT * FROM `$studienr` ORDER BY `point_id` DESC";
     $result = mysqli_query($db, $sqli);
 
-    $person = new bruger($studienrS);
-    $total = $person->point;
+    
 
     echo("Total points:");
     echo($total);

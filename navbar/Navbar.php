@@ -14,8 +14,11 @@
             <li class="nav-item">
                 <a class="navbar-link" href="./addpoint">Add points</a>
             </li>
+            <li class="nav-item">
+                <a class="navbar-link" href="./leaderboard">Leaderboard</a>
+            </li>
         </ul>
 
     </body>
-    <br></br>
+    
 </html>
