@@ -17,7 +17,7 @@ class bruger {
         if (!$this->studienr_exists()){
             exit("Ikke konstitueret medlem");
         }
-        $sqli = "SELECT * FROM `users` WHERE studienr=('$studienr')";
+        $sqli = "SELECT * FROM `konstituerede` WHERE studienr=('$studienr')";
         $result = mysqli_query($db, $sqli);
         $data= mysqli_fetch_array($result); 
         
@@ -80,13 +80,13 @@ class bruger {
         { 
         $this->point = $row['total'];
         }
-        $sqli = "UPDATE `users` SET point=('$this->point') WHERE studienr=('$this->studienr')";
+        $sqli = "UPDATE `konstituerede` SET point=('$this->point') WHERE studienr=('$this->studienr')";
         $result = mysqli_query($db, $sqli);
     }
 
     function studienr_exists(){
         include("db_connect.php"); // Forbinder til databasen.
-        $sqli = "SELECT * FROM `users` WHERE studienr=('$this->studienr');";
+        $sqli = "SELECT * FROM `konstituerede` WHERE studienr=('$this->studienr');";
         $result = mysqli_query($db, $sqli);
         console_log($this->studienr);
         console_log($result);

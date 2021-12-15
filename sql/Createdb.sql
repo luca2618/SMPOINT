@@ -6,7 +6,7 @@ USE `smdatabase`;
 /* Skaber tabeller til databasen. */
 
 /* Tabel med brugere */
-CREATE TABLE `users`(
+CREATE TABLE `konstituerede`(
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `studienr` VARCHAR(255) NOT NULL,
     `navn` VARCHAR(255) NOT NULL,
@@ -30,7 +30,7 @@ CREATE TABLE `rådsmøde`(
 );
 
 
-INSERT INTO `users`( `studienr`, `navn`, `email`, `telefonnr`, `point`) VALUES (
+INSERT INTO `konstituerede`( `studienr`, `navn`, `email`, `telefonnr`, `point`) VALUES (
     's214636',
     'Lucas Sylvester',
     'l@gmail.com',

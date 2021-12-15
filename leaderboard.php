@@ -13,7 +13,7 @@ include("user_class.php");
 include("db_connect.php");
 echo("<br><br>");
 
-$sqli = "SELECT * FROM users ORDER BY `point` DESC";
+$sqli = "SELECT * FROM konstituerede ORDER BY `point` DESC";
 $result = mysqli_query($db, $sqli);
 
 console_log($result);
