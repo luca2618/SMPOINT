@@ -50,7 +50,7 @@ if (($handle = fopen("point_liste.csv", "r")) !== FALSE) {
 ?>
 
 <h2> Hvad kan jeg bruge SM-KID point til?</h2>
-<tekst> Det kan jeg fandme ikke huske noget med en fest eller noget. </tekst><br><br>
+<tekst> Det kan jeg fandme ikke huske, noget med en fest eller noget. </tekst><br><br>
 
 </html>
 
