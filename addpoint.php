@@ -3,7 +3,7 @@
         <link rel="icon" type="image/x-icon" href="favicon.ico"/>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Home</title>
+        <title>Add point</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" defer></script> <!-- Tilføjer javascript-library "jqeury" -->
         <script src="https://requirejs.org/docs/release/2.3.5/minified/require.js" defer></script>
 </head>
@@ -22,6 +22,8 @@ while (($result = fgetcsv($file)) !== false)
 array_shift($csv);
 fclose($file);
 
+
+if ((isset($_SESSION['role']) && $_SESSION['role']>1)){
 ?>
 
 <br> </br>
@@ -55,16 +57,13 @@ fclose($file);
                             prefill_elements[i].style.display = "none";
                         }
                     }*/
-
-                
-
             }
             </script>
 
 
 
 <form action="" method="post" class="form">
-
+<text class="title">Add points</text>
 <div class="input-container ic1">
   <input type="text" id="studienr" name="studienr" required class="input" placeholder=" "><br><br>
   <div class="cut"></div>
@@ -89,31 +88,22 @@ fclose($file);
 </div>
 
 <div class="input-container ic1">
-    <input type="text" id="kommentar" name="kommentar" class="prefill input" placeholder=" ">
+    <input type="text" id="kommentar" name="kommentar" class="prefill input" placeholder=" "  autocomplete="off">
     <div class="cut"></div>
     <label for="kommentar" class="prefill placeholder">Kommentar:</label>
 </div>
 
 <div class="input-container ic1">
-  <input type="text" id="points" name="points" required autocomplete="off" class="prefill input" placeholder=" "><br class="prefill"><br class="prefill">
+  <input type="text" id="points" name="points" required autocomplete="off" autofill="off" class="prefill input" placeholder=" " autocomplete="off"><br class="prefill"><br class="prefill">
   <div class="cut"></div>
   <label for="points" class="prefill placeholder">Points:</label>
 </div>
+  <input type="submit" value="Submit" name="submit" class="submit">
+</form>
 
-<div class="input-container ic1">
-  <input type="password" id="password" name="password" required class="input" placeholder=" "><br><br>
-  <div class="cut"></div>
-  <label for="password" class="placeholder">Password:</label>
-</div>
-  <input type="submit" value="Submit" class="submit">
-  </form>
-
-
-
-
-
-
-
+<?php 
+}
+?>
 
 
 
@@ -122,41 +112,34 @@ fclose($file);
 // password (acces password for adding points) (pass is 1234 now)
 // aktivitet (aktivitet deltaget i)
 // is used of studie nr is not set card_id - used to identify student/studentnr
-
-include("db_connect.php");
-
-if (isset($_POST['password'])){
-    $pass_hash = hash('md5',$_POST['password']);
-    console_log($pass_hash);
-    //compare hash with password
-    if (strcmp($pass_hash,"81dc9bdb52d04dc20036dbd8313ed055") == 0){
-        console_log("passed hash check");
-        if (isset($_POST['studienr'])){
-            $studienr = $_POST['studienr'];
-        }elseif(isset($_POST['card_id'])){
-            $card_id = $_POST['card_id'];
-            $sqli = "SELECT studienr FROM `card_data` WHERE card_id=('$card_id')";
-            $studienr = mysqli_query($db, $sqli)->fetch_object()->studienr;
-        }
-        $aktivitet = $_POST['aktivitet'];
-        $points = $_POST['points'];
-        $kommentar = $_POST['kommentar'];
-        
-        $user = new bruger($studienr);
-        $points = trim($points);
-        if (! (is_numeric($points))){
-            exit("Error:non integer point value!");
-        }
-
-        //checker om brugeren er fremmødt til studierådsmøde
-        if (strcasecmp($aktivitet, "studierådsmøde") == 0){
-            $user->fremmødt();
-        }else{
-            $user->addpoint($points, $aktivitet, $kommentar);
-        }
-    }else{
-        exit("Error:Wrong password!");
+include("./config/db_connect.php");
+// the && only runs first check if its false therefore no problem with $_SESSION['role'] as its only reffered to if $_SESSION['role'] exists.
+if ((isset($_POST['password']) &&  (strcmp(hash('md5',$_POST['password']),"81dc9bdb52d04dc20036dbd8313ed055") == 0)) ||
+(isset($_SESSION['role']) && ($_SESSION['role']>1) && isset($_POST['submit']))){
+    if (isset($_POST['studienr'])){
+        $studienr = $_POST['studienr'];
+    }elseif(isset($_POST['card_id'])){
+        $card_id = $_POST['card_id'];
+        $sqli = "SELECT studienr FROM `card_data` WHERE card_id=('$card_id')";
+        $studienr = mysqli_query($db, $sqli)->fetch_object()->studienr;
     }
+    $aktivitet = $_POST['aktivitet'];
+    $points = $_POST['points'];
+    $kommentar = $_POST['kommentar'];
+    
+    $user = new bruger($studienr);
+    $points = trim($points);
+    if (! (is_numeric($points))){
+        exit("Error:non integer point value!");
+    }
+
+    //checker om brugeren er fremmødt til studierådsmøde
+    if (strcasecmp($aktivitet, "studierådsmøde") == 0){
+        $user->fremmødt();
+    }else{
+        $user->addpoint($points, $aktivitet, $kommentar);
+        }
+
 }
 
 ?>

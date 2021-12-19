@@ -4,7 +4,7 @@
         <link rel="stylesheet" href="./style/Stylesheet.css">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Home</title>
+        <title>Search</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" defer></script> <!-- Tilføjer javascript-library "jqeury" -->
 </head>
 
@@ -26,14 +26,14 @@ include("./navbar/Navbar.php"); // Indkluderer navbar.
 if (isset($_POST['studienr'])){
     $studienr = $_POST['studienr'];
     include("user_class.php");
-    include("db_connect.php"); // Forbinder til databasen.
+    include("./config/db_connect.php"); // Forbinder til databasen.
 
     $person = new bruger($studienr);
     $total = $person->point;
 
     #get all aktivities by id ascending order
 
-    $sqli = "SELECT * FROM `$studienr` ORDER BY `point_id` DESC";
+    $sqli = mysqli_real_escape_string($db,"SELECT * FROM `$studienr` ORDER BY `point_id` DESC");
     $result = mysqli_query($db, $sqli);
 
     
@@ -57,7 +57,7 @@ if (isset($_POST['studienr'])){
               . $row["point"] . "</th><th>" . $row["kommentar"]. "</th><th>" . $row["dato"] . "</th></tr>");
           }
       } else {
-          echo ("<th>0 results</th>");
+          echo ("<br><br><th>0 results</th><br>");
       }
       echo("</table>");
       mysqli_close($db);

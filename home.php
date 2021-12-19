@@ -10,7 +10,7 @@
 
 
 
-<?php 
+<?php
 include("./navbar/Navbar.php"); // Indkluderer navbar.
 ?>
 
@@ -19,9 +19,7 @@ include("./navbar/Navbar.php"); // Indkluderer navbar.
 <tekst> 
 Velkommen til SM-KID rådets pointside. <br>
 Her kan du hvilket point du selv og andre har opnået, samt 
-
 </tekst>
-
 <h2> Hvad er SM-KID point?</h2>
 <tekst> hi </tekst>
 

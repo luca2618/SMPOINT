@@ -2,7 +2,7 @@
         <link rel="stylesheet" href="./style/Stylesheet.css">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Home</title>
+        <title>Leaderboard</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" defer></script> <!-- Tilføjer javascript-library "jqeury" -->
         <script src="https://requirejs.org/docs/release/2.3.5/minified/require.js" defer></script>
 </head>
@@ -10,10 +10,10 @@
 
 include("./navbar/Navbar.php"); // Indkluderer navbar.
 include("user_class.php");
-include("db_connect.php");
+include("config/db_connect.php");
 echo("<br><br>");
-
-$sqli = "SELECT * FROM konstituerede ORDER BY `point` DESC";
+//+0 to make sure its handled as numbers
+$sqli = "SELECT * FROM konstituerede ORDER BY `point`+0 DESC";
 $result = mysqli_query($db, $sqli);
 
 console_log($result);

@@ -1,6 +1,6 @@
 <?php
 include("user_class.php");
-include("db_connect.php"); // Forbinder til databasen.
+include("./config/db_connect.php"); // Forbinder til databasen.
 
 
 $lucas = new bruger("s214636");
