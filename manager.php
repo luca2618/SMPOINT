@@ -10,6 +10,7 @@ include("./navbar/Navbar.php"); // Indkluderer navbar.
 include("./config/db_connect.php");
 include("user_class.php");
 
+
 $delete_message = "";
 $tilføj_kostitueret_message = "";
 $tilføj_kostitueret_liste_message = "";
@@ -17,10 +18,15 @@ $tilføj_aktivitet_liste_message = "";
 $tilføj_møde_liste_message = "";
 $møde_message = "";
 
+//variables for meeting form dates and stuff
+$today = date('Y-m-d');
+
 ?>
 
 <?php
 if (isset($_SESSION['role']) && ($_SESSION['role']>1) && isset($_POST['submit'])){
+    //switch statement to handle the post data, depending on which form you filled. 
+    //the value is determined by the submit value of each form and determined from that,
     switch ($_POST['submit']) {
         case "Tilføj konstitueret":
             //Setup variables
@@ -135,12 +141,22 @@ if (isset($_SESSION['role']) && ($_SESSION['role']>1) && isset($_POST['submit'])
                         $kode = $_POST['kode'];
                         $opretter = $_SESSION['name'];
                         
-                        //setup sql query
-                        $sql = "INSERT INTO `rådsmøde`( `dato`, `kode`, `opretter`) VALUES (
+                        //check if meeting already exists on that day
+                        $sqlcheck = "SELECT * FROM `raadsmode` WHERE `dato` = '$dato'";
+                        $checkresult = mysqli_query($db, $sqlcheck);
+                        //get result array
+                        $checkresult = $checkresult->fetch_assoc();
+                        if ($checkresult == null){
+                            //setup sql query
+                            $sql = "INSERT INTO `raadsmode`( `dato`, `kode`, `opretter`) VALUES (
                             '$dato',
                             '$kode',
                             '$opretter'
                         )";
+                        }else{
+                            $sql = "UPDATE `raadsmode` SET `kode` = '$kode' WHERE `dato` = '$dato'";
+                        }
+
                         $result = mysqli_query($db, $sql);
                         // check if the person already exists
                         if ($result){
@@ -156,6 +172,7 @@ if (isset($_SESSION['role']) && ($_SESSION['role']>1) && isset($_POST['submit'])
 
 
 <br><br>
+<!--Form for deleting an aktivity that a konstitueret has performed/ a point they have earned-->
 <div class="row">
 <div style="" class="column">
     <form action="" method="post" class="form">
@@ -179,7 +196,105 @@ if (isset($_SESSION['role']) && ($_SESSION['role']>1) && isset($_POST['submit'])
 
     </form>
 </div>
+<!--Form for adding a meeting-->
+<div style="" class="column">
+<form action="" method="post" class="form">
+    <text class="title">Tilføj møde</text>
+    <br>
+    <text class="subtitle">Hvis møde allerede existere, opdateres koden</text><br>
+    <text class="subtitle"><?php echo($møde_message);?></text>
 
+    <div class="input-container ic1">
+    <input type="date" id="dato" name="dato" required class="input" placeholder=" " 
+    <?php echo("value=\"$today\"
+       min=\"$today\" max=\"2025-12-31\"");?>><br><br>
+    <div class="cut"></div>
+    <label for="dato" class="placeholder">Dato:</label>
+    </div>
+
+    <div class="input-container ic1">
+    <input type="text" id="kode" name="kode" required autocomplete="off" autofill="off" class="input" placeholder=" " autocomplete="off">
+    <div class="cut"></div>
+    <label for="points" class="placeholder">Kode:</label>
+    </div>
+
+    <input type="submit" value="Opret møde" name="submit" class="submit">
+
+    </form>
+</div>
+<!--Form for importing a "konstituerings liste" into the database(from row 6 and beyond)-->
+<div style="" class="column">
+    <form action="" method="post" class="form" enctype="multipart/form-data">
+    <text class="title">Import konstitueret liste</text>
+    <br>
+    <text class="formtekst">
+    Tager udgangspunkt i formattering af listerne på drev.<br>
+    konstitueringslisterne starter på række 6 og indeholder i rækkefølge:<br>
+    'Fulde Navn', 'Studienr.', 'E-mail', 'Telefonnummer prefix(landkode)', 'Telefonnummer'<br>
+    </text>
+    <text class="subtitle">
+    <?php echo($tilføj_kostitueret_liste_message);?></text>
+
+    <div class="input-container ic1">
+    <label for="k_liste" class="subtitle">Konstitueringsliste:</label>
+    <input type="hidden" name="MAX_FILE_SIZE" value="30000" />
+    <input type="file" style="color:white" accept=".csv" id="k_liste" name="k_liste" required autocomplete="off" autofill="off" placeholder=" " autocomplete="off">
+    </div>
+
+    <input type="submit" value="Tilføj konstitueret liste" name="submit" class="submit">
+
+    </form>
+</div>
+
+</div>
+
+<br><br>
+<!--Form for import aktivities that members have performed, into the database-->
+<div class="row">
+<div style="" class="column">
+    <form action="" method="post" class="form" enctype="multipart/form-data">
+    <text class="title">Import aktivitetsliste</text>
+    <br>
+    <text class="formtekst">
+    Tager udgangspunkt i formattering af listerne på drev.<br>
+    konstitueringslisterne starter på række 2 og indeholder i rækkefølge:<br>
+    'Navn', 'Studienr.', 'aktivitet', 'dato', 'kommentar', 'points'<br>
+    Navn bruges ikke.</text>
+    <text class="subtitle">
+    <?php echo($tilføj_aktivitet_liste_message);?></text>
+
+    <div class="input-container ic1">
+    <label for="a_liste" class="subtitle">Aktivitetsliste:</label>
+    <input type="hidden" name="MAX_FILE_SIZE" value="30000" />
+    <input type="file" style="color:white" accept=".csv" id="a_liste" name="a_liste" required autocomplete="off" autofill="off" placeholder=" " autocomplete="off">
+    </div>
+    <input type="submit" value="Tilføj aktivitetsliste" name="submit" class="submit">
+    </form>
+</div>
+<!--Form for importing list of attending members into the database-->
+<div style="" class="column">
+    <form action="" method="post" class="form" enctype="multipart/form-data">
+    <text class="title">Import mødeliste</text>
+    <br>
+    <text class="formtekst">
+    Tager udgangspunkt i formattering af listerne på drev.<br>
+    mødelisterne starter på række 2 og indeholder i rækkefølge:<br>
+    'dato', 'Navn', 'Studienr.', 'retning', 'konstitueret(Ja/Nej)', 'random spørgsmål'<br>
+    Navn bruges ikke.</text>
+    <text class="subtitle">
+    <?php echo($tilføj_møde_liste_message);?></text>
+
+    <div class="input-container ic1">
+    <label for="a_liste" class="subtitle">Mødeliste:</label>
+    <input type="hidden" name="MAX_FILE_SIZE" value="30000" />
+    <input type="file" style="color:white" accept=".csv" id="møde_liste" name="møde_liste" required autocomplete="off" autofill="off" placeholder=" " autocomplete="off">
+    </div>
+
+    <input type="submit" value="Tilføj mødeliste" name="submit" class="submit">
+
+    </form>
+</div>
+<!--Form for manually adding a missing konstitueret-->
 <div style="" class="column">
     <form action="" method="post" class="form">
     <text class="title">Tilføj konstitueret</text>
@@ -212,109 +327,8 @@ if (isset($_SESSION['role']) && ($_SESSION['role']>1) && isset($_POST['submit'])
 
     <input type="submit" value="Tilføj konstitueret" name="submit" class="submit">
     </form>
-</div>
 
-<div style="" class="column">
-    <form action="" method="post" class="form" enctype="multipart/form-data">
-    <text class="title">Import konstitueret liste</text>
-    <br>
-    <text class="formtekst">
-    Tager udgangspunkt i formattering af listerne på drev.<br>
-    konstitueringslisterne starter på række 6 og indeholder i rækkefølge:<br>
-    'Fulde Navn', 'Studienr.', 'E-mail', 'Telefonnummer prefix(landkode)', 'Telefonnummer'<br>
-    </text>
-    <text class="subtitle">
-    <?php echo($tilføj_kostitueret_liste_message);?></text>
 
-    <div class="input-container ic1">
-    <label for="k_liste" class="subtitle">Konstitueringsliste:</label>
-    <input type="hidden" name="MAX_FILE_SIZE" value="30000" />
-    <input type="file" style="color:white" accept=".csv" id="k_liste" name="k_liste" required autocomplete="off" autofill="off" placeholder=" " autocomplete="off">
-    </div>
-
-    <input type="submit" value="Tilføj konstitueret liste" name="submit" class="submit">
-
-    </form>
-</div>
-
-</div>
-
-<br><br>
-
-<div class="row">
-<div style="" class="column">
-    <form action="" method="post" class="form" enctype="multipart/form-data">
-    <text class="title">Import aktivitetsliste</text>
-    <br>
-    <text class="formtekst">
-    Tager udgangspunkt i formattering af listerne på drev.<br>
-    konstitueringslisterne starter på række 2 og indeholder i rækkefølge:<br>
-    'Navn', 'Studienr.', 'aktivitet', 'dato', 'kommentar', 'points'<br>
-    Navn bruges ikke.</text>
-    <text class="subtitle">
-    <?php echo($tilføj_aktivitet_liste_message);?></text>
-
-    <div class="input-container ic1">
-    <label for="a_liste" class="subtitle">Aktivitetsliste:</label>
-    <input type="hidden" name="MAX_FILE_SIZE" value="30000" />
-    <input type="file" style="color:white" accept=".csv" id="a_liste" name="a_liste" required autocomplete="off" autofill="off" placeholder=" " autocomplete="off">
-    </div>
-
-    <input type="submit" value="Tilføj aktivitetsliste" name="submit" class="submit">
-
-    </form>
-</div>
-
-<div style="" class="column">
-    <form action="" method="post" class="form" enctype="multipart/form-data">
-    <text class="title">Import mødeliste</text>
-    <br>
-    <text class="formtekst">
-    Tager udgangspunkt i formattering af listerne på drev.<br>
-    mødelisterne starter på række 2 og indeholder i rækkefølge:<br>
-    'dato', 'Navn', 'Studienr.', 'retning', 'konstitueret(Ja/Nej)', 'random spørgsmål'<br>
-    Navn bruges ikke.</text>
-    <text class="subtitle">
-    <?php echo($tilføj_møde_liste_message);?></text>
-
-    <div class="input-container ic1">
-    <label for="a_liste" class="subtitle">Mødeliste:</label>
-    <input type="hidden" name="MAX_FILE_SIZE" value="30000" />
-    <input type="file" style="color:white" accept=".csv" id="møde_liste" name="møde_liste" required autocomplete="off" autofill="off" placeholder=" " autocomplete="off">
-    </div>
-
-    <input type="submit" value="Tilføj mødeliste" name="submit" class="submit">
-
-    </form>
-</div>
-<?php 
-//variables for meeting form dates and stuff
-$today = date('d-m-Y');
-
-?>
-<div style="" class="column">
-    <form action="" method="post" class="form">
-    <text class="title">Tilføj møde</text>
-    <br>
-    <text class="subtitle"><?php echo($møde_message);?></text>
-
-    <div class="input-container ic1">
-    <input type="date" id="dato" name="dato" required class="input" placeholder=" " 
-    <?php echo("value=\"$today\"
-       min=\"$today\" max=\"2025-12-31\"");?>><br><br>
-    <div class="cut"></div>
-    <label for="dato" class="placeholder">Dato:</label>
-    </div>
-
-    <div class="input-container ic1">
-    <input type="text" id="kode" name="kode" required autocomplete="off" autofill="off" class="input" placeholder=" " autocomplete="off">
-    <div class="cut"></div>
-    <label for="points" class="placeholder">Kode:</label>
-    </div>
-
-    <input type="submit" value="Opret møde" name="submit" class="submit">
-
-    </form>
 </div>
 
 </div>

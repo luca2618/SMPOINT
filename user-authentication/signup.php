@@ -1,4 +1,7 @@
-<?php include('./user-authentication/controllers/register.php'); ?>
+<?php 
+if ((isset($_SESSION['role']) && $_SESSION['role']>1)){
+
+include('./user-authentication/controllers/register.php'); ?>
 
 <!doctype html>
 <html lang="en">
@@ -58,3 +61,6 @@
 </body>
 
 </html>
+<?php 
+}
+?>

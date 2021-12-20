@@ -6,7 +6,7 @@
         <!-- Liste med elementer i navbaren. -->
         <ul class="navbar">
             <li class="nav-item">
-                <a class="navbar-link" href="./">Home</a>
+                <a class="navbar-link" href="./home">Home</a>
             </li>
             <li class="nav-item">
                 <a class="navbar-link" href="./search">Search</a>
@@ -41,6 +41,12 @@
                 <li class="nav-item">
                 <a class="navbar-link" href="./manager">Manage</a>
                 </li>
+
+                <li class="nav.item" style="float:right">
+                    <a class="navbar-link" href="./signup">Sign up</a>
+                </li>
+
+
                 
                 <?php } ?>
 

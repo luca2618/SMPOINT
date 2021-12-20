@@ -1,3 +1,4 @@
+<title>Check in</title>
 <?php
 include("header.php");
 include("./navbar/Navbar.php"); // Indkluderer navbar.
@@ -16,13 +17,13 @@ $kode = $_POST['kode'];
         $today = mysqli_real_escape_string($db,$today);
         $studienr = mysqli_real_escape_string($db,$studienr);
         //we limit the statement to only return 1 hit, as there should not be more than one meeting per day
-        $sqli = "SELECT * FROM `rådsmøde` WHERE `dato` = '$today' LIMIT 1";
+        $sqli = "SELECT * FROM `raadsmode` WHERE `dato` = '$today' LIMIT 1";
         $result = mysqli_query($db, $sqli);
         $data = $result->fetch_assoc();
         if ($data == null){
             $return_besked = "intet møde i dag";
         }else{
-            if (strcasecmp($data['kode'],$kode) == 0){
+            if (strcmp($data['kode'],$kode) == 0){
                 $konstitueret = new bruger($studienr);
                 $konstitueret->fremmødt();
                 $return_besked = "Succes";

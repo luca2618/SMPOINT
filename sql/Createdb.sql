@@ -23,21 +23,13 @@ CREATE TABLE `card_data`(
     `studienr` VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE `rådsmøde`(
+CREATE TABLE `raadsmode`(
     `møde_nr` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `dato` VARCHAR(255) NOT NULL,
     `kode` VARCHAR(255) NOT NULL,
     `opretter` VARCHAR(255) NOT NULL
 );
 
-
-INSERT INTO `konstituerede`( `studienr`, `navn`, `email`, `telefonnr`, `point`) VALUES (
-    's214636',
-    'Lucas Sylvester',
-    'l@gmail.com',
-    '40143444',
-    '30'
-);
 
 CREATE TABLE `users` (
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -47,10 +39,36 @@ CREATE TABLE `users` (
     `role` VARCHAR(255) NOT NULL,
     `date_time` VARCHAR(255) NOT NULL);
 
-    INSERT INTO `users`( `name`, `email`, `role`, `password`, `date_time`) VALUES (
-    'lucas Sylvester',
+CREATE TABLE `point_options` (
+    `Aktivitet` VARCHAR(255),
+    `Point` FLOAT,
+    `Forklaring` VARCHAR(255));
+
+
+
+INSERT INTO `users`( `name`, `email`, `role`, `password`, `date_time`) VALUES (
+    'Lucas Sylvester',
     'l@gmail.com',
     '2',
     '$2b$10$2gX7b6lV.nKxC2jWhfEbkeTmyBj1Lw4NRmVSfbBdh601zDSMBhmFC',
     'idk'
 );
+
+
+INSERT INTO `konstituerede`( `studienr`, `navn`, `email`, `telefonnr`, `point`) VALUES (
+    's214636',
+    'Lucas Sylvester',
+    'l@gmail.com',
+    '40143444',
+    '30
+
+
+
+
+
+
+
+
+
+
+

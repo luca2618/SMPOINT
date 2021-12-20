@@ -2,9 +2,6 @@
    
     // Database connection
     include('./config/db_connect.php');
-
-    // Swiftmailer lib
-    require_once './user-authentication/lib/vendor/autoload.php';
     
     // Error & success messages
     global $success_msg, $email_exist, $NameErr, $_emailErr, $_passwordErr, $status;
@@ -61,10 +58,10 @@
                 if((preg_match("/^[a-zA-Z ]*$/", $_name)) && (preg_match("/^(?=.*\d)(?=.*[@#\-_$%^&+=§!\?])(?=.*[a-z])(?=.*[A-Z])[0-9A-Za-z@#\-_$%^&+=§!\?]{8,20}$/", $_password))){
                     // Password hash
                     $password_hash = password_hash($password, PASSWORD_BCRYPT);
-
+                    $today = date('d/m/Y');
                     // Query
                     $sql = "INSERT INTO `users` (`name`, `email`, `password`, `role`, `date_time`) 
-                    VALUES ('$name', '$email', '$password_hash','2', date('d/m/Y'))";
+                    VALUES ('$name', '$email', '$password_hash','2', '$today')";
                     $status = "succes";
                     // Create mysql query
                     $sqlQuery = mysqli_query($connection, $sql);

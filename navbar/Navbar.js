@@ -2,8 +2,8 @@
 
 $(document).ready(function() {
 	$(".navbar-link[href]").each(function(index) {
-
-		if(this.href == window.location.href) {
+		//now only check if it contains, so we dont mess up get forms, but be carefull with overlapping urls.
+		if(window.location.href.includes(this.href)) {
 			$(this).addClass("active"); // Tilføjer en "active" klasse til element.
 		}
 	}); 

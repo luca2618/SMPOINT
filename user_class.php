@@ -49,7 +49,7 @@ class bruger {
         $this->update();
     }
 
-    function addpoint_no_date($points, $aktivitet, $kommentar,$dato) {
+    function addpoint_no_date($points, $aktivitet, $kommentar, $dato) {
 
         if (!$this->studienr_exists()){
             exit("Ikke konstitueret medlem");
@@ -105,7 +105,7 @@ class bruger {
         if ($data == NULL){
             $points = 1;
             $kommentar = "Fremmødt";
-            $aktivitet = "studierådsmøde";
+            $aktivitet = "Studierådsmøde";
     
             $this->addpoint($points, $aktivitet, $kommentar);
             $this->update();

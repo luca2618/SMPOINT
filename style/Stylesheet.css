@@ -16,6 +16,9 @@ td, th {
 tr:nth-child(even) {
   background-color: #dddddd;
 }
+tr:nth-child(odd) {
+  background-color: #ffffff;
+}
 
 .submit {
   background-color: #08d;
@@ -76,6 +79,13 @@ body {
   margin-top: 10px;
 }
 .formtekst {
+  color: #eee;
+  font-family: sans-serif;
+  font-size: 11px;
+  margin-top: 10px;
+}
+
+.whitetekst {
   color: #eee;
   font-family: sans-serif;
   font-size: 11px;
@@ -162,4 +172,26 @@ body {
 
 .column {
   flex: 1 1 0px;
+}
+
+
+.link:link {
+  color: #0a9eda;
+  background-color: transparent;
+  text-decoration: none;
+}
+.link:visited {
+  color: #0a9eda;
+  background-color: transparent;
+  text-decoration: none;
+}
+.link:hover {
+  color: #195473;
+}
+
+.bluebox {
+  background-color: #15172b;
+  border-radius: 20px;
+  box-sizing: border-box;
+  padding: 30px;
 }

@@ -14,7 +14,7 @@ if($_SERVER["HTTPS"] != "on")
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>PHP User Registration & Login System Demo</title>
+    <title>Login</title>
     <!-- jQuery + Bootstrap JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
@@ -38,7 +38,6 @@ if($_SERVER["HTTPS"] != "on")
                     <text class="subtitle">
                     <?php echo $accountNotExistErr; ?>
                     <?php echo $emailPwdErr; ?>
-                    <?php echo $verificationRequiredErr; ?>
                     <?php echo $email_empty_err; ?>
                     <?php echo $pass_empty_err; ?>
                     </text>

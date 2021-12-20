@@ -13,34 +13,41 @@
 include("./navbar/Navbar.php"); // Indkluderer navbar.
 
 ?>
-<br> </br>
-<form action="" method="post">
-  <label for="fname">Studienr:</label>
-  <input type="text" id="studienr" name="studienr"><br><br>
-  <input type="submit" value="Search">
+<br> <br>
+<form action="" method="get" class="form">
+<text class="title">Search</text><br>
+<text class="subtitle">Søg på studie nr. for at hente aktiviter og information</text>
+
+<div class="input-container ic1">
+  <input type="text" id="studienr" name="studienr" class="input" placeholder=" "><br><br>
+  <div class="cut"></div>
+  <label for="studienr" class="placeholder">Studienr:</label>
+</div>
+  <input type="submit" value="Search" class="submit">
   </form>
+  <br>
 
 <?php
 
 
-if (isset($_POST['studienr'])){
-    $studienr = $_POST['studienr'];
+if (isset($_GET['studienr'])){
+    echo("<div class=\"bluebox\">");
+    $studienr = $_GET['studienr'];
     include("user_class.php");
     include("./config/db_connect.php"); // Forbinder til databasen.
-
+    echo("<text class=\"subtitle\"> ");
     $person = new bruger($studienr);
-    $total = $person->point;
-
+    echo("</text>");
     #get all aktivities by id ascending order
 
     $sqli = mysqli_real_escape_string($db,"SELECT * FROM `$studienr` ORDER BY `point_id` DESC");
     $result = mysqli_query($db, $sqli);
 
-    
-
-    echo("Total points:");
-    echo($total);
-
+    ?>
+    <text class="title"><?php echo($person->navn); ?> </tekst><br>
+    <text class="subtitle">Studienummer: <?php echo($person->studienr); ?> </tekst><br>
+    <text class="subtitle">Total points:<?php echo($person->point); ?> </tekst><br><br>
+    <?php
     if ($result != False){
       if ($result->num_rows > 0)  {
           // output data of each row
@@ -64,6 +71,7 @@ if (isset($_POST['studienr'])){
       }
     }
 ?>
+<div>
 
 
 
