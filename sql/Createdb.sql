@@ -7,7 +7,7 @@ DROP TABLE IF EXISTS `s214636`;
 /* Skaber tabeller til databasen. */
 
 /* Tabel med brugere */
-CREATE TABLE `konstituerede`(
+CREATE TABLE `medlemmer`(
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `studienr` VARCHAR(255) NOT NULL,
     `navn` VARCHAR(255) NOT NULL,
@@ -17,21 +17,15 @@ CREATE TABLE `konstituerede`(
     `card_id` VARCHAR(255)
 );
 
-CREATE TABLE `card_data`(
-    `entry_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `card_id` VARCHAR(255) NOT NULL,
-    `studienr` VARCHAR(255) NOT NULL
-);
-
 CREATE TABLE `raadsmode`(
-    `møde_nr` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `mode_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `dato` VARCHAR(255) NOT NULL,
     `kode` VARCHAR(255) NOT NULL,
     `opretter` VARCHAR(255) NOT NULL
 );
 
 
-CREATE TABLE `users` (
+CREATE TABLE `admins` (
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `name` VARCHAR(255) NOT NULL,
     `email` VARCHAR(255) NOT NULL,
@@ -39,14 +33,22 @@ CREATE TABLE `users` (
     `role` VARCHAR(255) NOT NULL,
     `date_time` VARCHAR(255) NOT NULL);
 
-CREATE TABLE `point_options` (
+CREATE TABLE `aktivitet_typer` (
+    `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `Aktivitet` VARCHAR(255),
     `Point` FLOAT,
     `Forklaring` VARCHAR(255));
 
+CREATE TABLE `aktiviteter` (
+    `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `studienr` VARCHAR(255),
+    `aktivitet` VARCHAR(255), --(meeting, defined activity, free activity)
+    `refference_id` INT, -- if its a meeting its mode_id, for predfined activities its the aktivitet types id
+    `point` INT,
+    `Forklaring` VARCHAR(255));
 
 
-INSERT INTO `users`( `name`, `email`, `role`, `password`, `date_time`) VALUES (
+INSERT INTO `admins`( `name`, `email`, `role`, `password`, `date_time`) VALUES (
     'Lucas Sylvester',
     'l@gmail.com',
     '2',
@@ -55,7 +57,7 @@ INSERT INTO `users`( `name`, `email`, `role`, `password`, `date_time`) VALUES (
 );
 
 
-INSERT INTO `konstituerede`( `studienr`, `navn`, `email`, `telefonnr`, `point`) VALUES (
+INSERT INTO `medlemmer`( `studienr`, `navn`, `email`, `telefonnr`, `point`) VALUES (
     's214636',
     'Lucas Sylvester',
     'l@gmail.com',
