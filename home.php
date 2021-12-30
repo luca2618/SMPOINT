@@ -12,6 +12,7 @@
 
 <?php
 include("./navbar/Navbar.php"); // Indkluderer navbar.
+include("user_class.php");
 ?>
 
 <br>
@@ -27,24 +28,32 @@ Her kan du hvilket point du selv og andre har opnået, samt
 <tekst> Du får SM-KID point ved at udføre forskellige frivillige opgaver i SM-KID rådet, og ved at møde op til studierådsmøderne.  <br><br></tekst>
 
 <?php
-$row = 1;
-if (($handle = fopen("point_liste.csv", "r")) !== FALSE) {
-        echo("<table>");
-    while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-        $num = count($data);
-        echo("<tr>");
-        $row++;
-        for ($c=0; $c < $num; $c++) {
-                echo("<th>");
-                echo $data[$c] . "<br />\n";
-                echo("</th>");
+include("./config/db_connect.php"); // Forbinder til databasen.
+$sqli = "SELECT * FROM `aktivitet_typer` ORDER BY `type_id` ASC";
+$result = mysqli_query($db, $sqli);
+
+console_log($sqli);
+
+if ($result != False){
+    $ranknr = 0;
+    if ($result->num_rows > 0)  {
+        // output data of each row
+        echo("<table>
+        <tr>
+        <th>Aktivitet</th>
+        <th>Point</th>
+        <th>Forklaring</th>
+        </tr>");
+        while($row = $result->fetch_assoc()) {
+            $ranknr += 1;
+            echo("<tr> <th> " . $row["Aktivitet"]. "</th><th>" . $row["Point"]. "</th><th>" . $row["Forklaring"]. "</th></tr>");
         }
-        echo("</tr>");
-        
+    } else {
+        echo ("<th>0 results</th>");
     }
     echo("</table>");
-    fclose($handle);
-}
+    mysqli_close($db);
+    }
 ?>
 
 <h2> Hvad kan jeg bruge SM-KID point til?</h2>

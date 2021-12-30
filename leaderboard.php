@@ -13,7 +13,7 @@ include("user_class.php");
 include("config/db_connect.php");
 echo("<br><br>");
 //+0 to make sure its handled as numbers
-$sqli = "SELECT * FROM konstituerede ORDER BY `point`+0 DESC";
+$sqli = "SELECT * FROM `medlemmer` ORDER BY `point`+0 DESC";
 $result = mysqli_query($db, $sqli);
 
 console_log($result);

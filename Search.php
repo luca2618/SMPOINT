@@ -37,19 +37,18 @@ if (isset($_GET['studienr'])){
     include("./config/db_connect.php"); // Forbinder til databasen.
     echo("<text class=\"subtitle\"> ");
     $person = new bruger($studienr);
+    $person->update();
     echo("</text>");
     #get all aktivities by id ascending order
 
-    $sqli = mysqli_real_escape_string($db,"SELECT * FROM `$studienr` ORDER BY `point_id` DESC");
-    $result = mysqli_query($db, $sqli);
 
     ?>
     <text class="title"><?php echo($person->navn); ?> </tekst><br>
     <text class="subtitle">Studienummer: <?php echo($person->studienr); ?> </tekst><br>
     <text class="subtitle">Total points:<?php echo($person->point); ?> </tekst><br><br>
     <?php
-    if ($result != False){
-      if ($result->num_rows > 0)  {
+      $result = $person->aktivitets_liste;
+      if ($result != null)  {
           // output data of each row
           echo("<table>
           <tr>
@@ -59,8 +58,9 @@ if (isset($_GET['studienr'])){
           <th>Kommentar</th>
           <th>Dato</th>
           </tr>");
-          while($row = $result->fetch_assoc()) {
-              echo("<tr> <th>id: " . $row["point_id"]. "</th><th> " . $row["aktivitet"]. "</th><th>"
+          foreach ($result as $row) {
+            console_log($result);
+              echo("<tr> <th>id: " . $row["id"]. "</th><th> " . $row["aktivitet"]. "</th><th>"
               . $row["point"] . "</th><th>" . $row["kommentar"]. "</th><th>" . $row["dato"] . "</th></tr>");
           }
       } else {
@@ -68,7 +68,7 @@ if (isset($_GET['studienr'])){
       }
       echo("</table>");
       mysqli_close($db);
-      }
+
     }
 ?>
 <div>

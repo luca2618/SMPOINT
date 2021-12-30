@@ -11,16 +11,13 @@
 
 include("./navbar/Navbar.php"); // Indkluderer navbar.
 include("user_class.php");
+include("./config/db_connect.php"); // Forbinder til databasen.
+$sqli = "SELECT * FROM `aktivitet_typer` ORDER BY `type_id` ASC";
+$result = mysqli_query($db, $sqli);
 
-$csv = array();
-$file = fopen('point_liste.csv', 'r');
-
-while (($result = fgetcsv($file)) !== false)
-{
-    $csv[] = $result;
-}
-array_shift($csv);
-fclose($file);
+while ($row = mysqli_fetch_assoc($result)) {
+    $aktivitets_typer[] = $row; // Inside while loop
+ }
 
 
 if ((isset($_SESSION['role']) && $_SESSION['role']>1)){
@@ -31,16 +28,16 @@ if ((isset($_SESSION['role']) && $_SESSION['role']>1)){
             // Funktion der ændrer layoutet på siden, hver gang man ændrer aktiviteten.
             function changeform(){
                 var aktivitet = document.getElementById('aktivitet').value;
-                var csv = <?php echo json_encode($csv); ?>;
+                var aktivitets_typer = <?php echo json_encode($aktivitets_typer); ?>;
                 var prefill_elements = document.getElementsByClassName("prefill");
                 var hide = false;
                 
-                for (i in csv){
+                for (i in aktivitets_typer){
                     //console.log(aktivitet_values_array[aktivitet_index]["Aktivitet"]);
-                    if (aktivitet === csv[i][0]) {
+                    if (aktivitet === aktivitets_typer[i]['Aktivitet']) {
                         hide =true;
-                        document.getElementById("points").value = csv[i][1];
-                        document.getElementById("kommentar").value = csv[i][2];
+                        document.getElementById("points").value = aktivitets_typer[i]['Point'];
+                        document.getElementById("kommentar").value = aktivitets_typer[i]['Forklaring'];
                     }
 
                 }
@@ -76,10 +73,10 @@ if ((isset($_SESSION['role']) && $_SESSION['role']>1)){
   <div class="cut"></div>
   <datalist id="aktivitets_list">
   <?php
-  foreach ($csv as $value){
-    echo("<option value=");
-    echo($value[0]);
-    echo(">");
+  foreach ($aktivitets_typer as $value){
+    echo("<option value=\"");
+    echo($value['Aktivitet']);
+    echo("\">");
   }
   ?>
   </datalist>
@@ -133,7 +130,7 @@ if ((isset($_POST['password']) &&  (strcmp(hash('md5',$_POST['password']),"81dc9
         exit("Error:non integer point value!");
     }
 
-    //checker om brugeren er fremmødt til studierådsmøde
+    //checker om brugeren er fremmødt til studierådsmøde (er lig med 0 hvis str er ens)
     if (strcasecmp($aktivitet, "studierådsmøde") == 0){
         $user->fremmødt();
     }else{

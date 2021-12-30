@@ -46,12 +46,17 @@ if (isset($_SESSION['role']) && ($_SESSION['role']>1) && isset($_POST['submit'])
         case "Delete point":
             $studienr = $_POST['studienr'];
             $pointid = $_POST['point_id'];
+            if (studienr_exists($studienr)){
             $konstitueret = new bruger($studienr);
-            if ($konstitueret->deletepoint($pointid)){
-                $delete_message = "succes";
+                if ($konstitueret->deletepoint($pointid)){
+                    $delete_message = "succes";
+                }else{
+                    $delete_message = "id eller studienr ikke fundet";
+                }
             }else{
                 $delete_message = "id eller studienr ikke fundet";
             }
+            
 
 
             break;
@@ -113,8 +118,12 @@ if (isset($_SESSION['role']) && ($_SESSION['role']>1) && isset($_POST['submit'])
                     //'dato', 'Navn', 'Studienr.', 'retning', 'konstitueret(Ja/Nej)', 'random spørgsmål'
                     for ($row = 1; $row<sizeof($csvAsArray); $row++){
                         $dato = $csvAsArray[$row][0];
-                        //$date format from the google forms include exazt time so we just cut the date out
+                        
+                        //$date format from the google forms include exact time so we just cut the date out
                         $dato = substr($dato, 0, -9);
+                        //reformat to yyyy-mm-dd
+                        $dato = str_replace('/', '-', $dato);
+                        $dato = date ('Y-m-d', strtotime($dato));
                         $navn = $csvAsArray[$row][1];
                         $studienr = $csvAsArray[$row][2];
                         $medlem =  $csvAsArray[$row][4];
@@ -124,9 +133,8 @@ if (isset($_SESSION['role']) && ($_SESSION['role']>1) && isset($_POST['submit'])
                         //check om personen siger de er medlem af rådet
                         if ((trim($navn) != "")&&(strcasecmp($medlem,"Ja") == 0)){
                             if(studienr_exists($studienr)){
-                                console_log($navn);
                                 $konstitueret = new bruger($studienr);
-                                $konstitueret->addpoint_no_date($point, $aktivitet, $kommentar, $dato);
+                                $konstitueret->addpoint($point, $aktivitet, $kommentar, $dato);
                                 $succes++;
                             }
                             $entries++;
@@ -166,6 +174,25 @@ if (isset($_SESSION['role']) && ($_SESSION['role']>1) && isset($_POST['submit'])
                         }
 
                         break;
+                    
+                        case "Import aktivitetsliste":
+
+                            if (($handle = fopen("point_liste.csv", "r")) !== FALSE) {
+                                while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                                    $aktivitet = $data[0];
+                                    $point = $data[1];
+                                    $forklaring = mysqli_real_escape_string($db, $data[2]);
+                            
+                                    $sqli = "INSERT INTO  `aktivitet_typer` (`Aktivitet`, `Point`, `Forklaring`) 
+                                    VALUES ('$aktivitet', '$point', '$forklaring'); ";
+                                    $result = mysqli_query($db, $sqli);
+                                }
+                                fclose($handle);
+                            }
+                        break;
+
+                        
+
     }
 }
 ?>
@@ -175,7 +202,7 @@ if (isset($_SESSION['role']) && ($_SESSION['role']>1) && isset($_POST['submit'])
 <!--Form for deleting an aktivity that a konstitueret has performed/ a point they have earned-->
 <div class="row">
 <div style="" class="column">
-    <form action="" method="post" class="form">
+    <form action="" method="post" class="form" onsubmit="return confirm('Are you sure you want to submit?')">
     <text class="title">Delete points</text>
     <br>
     <text class="subtitle"><?php echo($delete_message);?></text>
@@ -331,8 +358,18 @@ if (isset($_SESSION['role']) && ($_SESSION['role']>1) && isset($_POST['submit'])
 
 </div>
 
+
 </div>
 
+<div style="" class="column">
+    <form action="" method="post" class="form">
+    <text class="title">Import aktivitetsliste</text>
+
+    <input type="submit" value="Import aktivitetsliste" name="submit" class="submit">
+    </form>
+
+
+</div>
 
 <?php
 }

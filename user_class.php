@@ -8,6 +8,7 @@ class bruger {
     public $email;
     public $telefonnr;
     public $point;
+    public $aktivitets_liste;
 
     // Klassens constructor.
     function __construct($studienr) {
@@ -17,7 +18,7 @@ class bruger {
         if (!$this->studienr_exists()){
             exit("Ikke konstitueret medlem");
         }
-        $sqli = "SELECT * FROM `konstituerede` WHERE studienr=('$studienr')";
+        $sqli = "SELECT * FROM `medlemmer` WHERE studienr=('$studienr')";
         $result = mysqli_query($db, $sqli);
         $data= mysqli_fetch_array($result); 
         
@@ -26,44 +27,26 @@ class bruger {
         $this->navn = $data['navn'];
         $this->telefonnr = $data['telefonnr'];  
         $this->email = $data['email'];
+
+        $aktiviteter_sqli = "SELECT * FROM `aktiviteter` WHERE studienr=('$studienr')";
+        $aktiviteter_result = mysqli_query($db, $aktiviteter_sqli);
+        while ($row = mysqli_fetch_assoc($aktiviteter_result)) {
+            $this->aktivitets_liste[] = $row; // Inside while loop
+         }
+
     }
 
     //tilføjer point til brugeren
-    function addpoint($points, $aktivitet, $kommentar) {
-
-        if (!$this->studienr_exists()){
-            exit("Ikke konstitueret medlem");
-        }
-        
-        // Forbinder til databasen.
-        include("./config/db_connect.php"); 
-
-
-        $dato = date('d/m/Y');
-
-        //tilføjer aktivitet til brugeren
-        $insertSQL = "INSERT INTO `$this->studienr` (`aktivitet`, `point`, `kommentar`, `dato`) 
-        VALUES ('$aktivitet', '$points', '$kommentar' , '$dato')";
-        $result = mysqli_query($db, $insertSQL);
-
-        $this->update();
-    }
-
-    function addpoint_no_date($points, $aktivitet, $kommentar, $dato) {
-
-        if (!$this->studienr_exists()){
-            exit("Ikke konstitueret medlem");
-        }
-        
+    function addpoint($points, $aktivitet, $kommentar, $dato) {
         // Forbinder til databasen.
         include("./config/db_connect.php"); 
 
         //tilføjer aktivitet til brugeren
-        $insertSQL = "INSERT INTO `$this->studienr` (`aktivitet`, `point`, `kommentar`, `dato`) 
-        VALUES ('$aktivitet', '$points', '$kommentar' , '$dato')";
+        $insertSQL = "INSERT INTO `aktiviteter` (`studienr`, `aktivitet`, `point`, `kommentar`, `dato`) 
+        VALUES ('$this->studienr', '$aktivitet', '$points', '$kommentar' , '$dato')";
         $result = mysqli_query($db, $insertSQL);
-
-        $this->update();
+        console_log($insertSQL);
+        //$this->update();
     }
 
     function deletepoint($pointid){
@@ -74,7 +57,7 @@ class bruger {
             return false;
         }
         //checkf først om id'et af aktiviteten findes
-        $idsql = "SELECT * FROM `$this->studienr` WHERE `point_id` = $pointid LIMIT 1";
+        $idsql = "SELECT * FROM `aktiviteter` WHERE (`id` = $pointid and `studienr` = '$this->studienr') LIMIT 1";
         $result = mysqli_query($db, $idsql);
         //if the acitity doesent exist then return false
         if ($result->fetch_assoc() == null){
@@ -82,7 +65,7 @@ class bruger {
         }
 
         //fjerner aktivitet fra brugeren
-        $insertSQL = "DELETE FROM `$this->studienr` WHERE `point_id`='$pointid'";
+        $insertSQL = "DELETE FROM `aktiviteter` WHERE `id`='$pointid'";
         $result = mysqli_query($db, $insertSQL);
         
         //on succes update points and return true
@@ -98,7 +81,7 @@ class bruger {
             exit("Ikke konstitueret medlem");
         }
 
-        $sqli = "SELECT * FROM `$this->studienr` WHERE (dato=('$dato') AND aktivitet=('studierådsmøde'))";
+        $sqli = "SELECT * FROM `aktiviteter` WHERE (`dato`='$dato' AND `aktivitet`='studierådsmøde' AND `studienr` = '$this->studienr')";
         $result = mysqli_query($db, $sqli);
         $data= mysqli_fetch_array($result);
         console_log($data);
@@ -115,7 +98,7 @@ class bruger {
     //Opdaterer brugerens point
     function update(){
         include("./config/db_connect.php"); // Forbinder til databasen.
-        $sql="SELECT sum(`point`) as total FROM `$this->studienr`";
+        $sql="SELECT sum(`point`) as total FROM `aktiviteter` WHERE studienr=('$this->studienr')";
 
         $result = mysqli_query($db, $sql);
 
@@ -123,30 +106,16 @@ class bruger {
         { 
         $this->point = $row['total'];
         }
-        $sqli = "UPDATE `konstituerede` SET point=('$this->point') WHERE studienr=('$this->studienr')";
+        $sqli = "UPDATE `medlemmer` SET point=('$this->point') WHERE studienr=('$this->studienr')";
         $result = mysqli_query($db, $sqli);
     }
 
     function studienr_exists(){
         include("./config/db_connect.php"); // Forbinder til databasen.
-        $sqli = "SELECT * FROM `konstituerede` WHERE studienr=('$this->studienr');";
+        $sqli = "SELECT * FROM `medlemmer` WHERE studienr='$this->studienr';";
         $result = mysqli_query($db, $sqli);
         if (mysqli_fetch_array($result) == null){
             return false;
-        }
-   
-        $sqli = "SELECT * FROM `$this->studienr`";
-        $result = mysqli_query($db, $sqli);
-        if(!$result){
-            $tableSQL = "CREATE TABLE `$this->studienr`(
-                `point_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `aktivitet` VARCHAR(255) NOT NULL,
-                `point` VARCHAR(255) NOT NULL,
-                `kommentar` VARCHAR(255) NOT NULL,
-                `dato` VARCHAR(255) NOT NULL
-            );";
-        $result = mysqli_query($db, $tableSQL);
-        console_log($db -> error);
         }
     return true;
     }
@@ -154,8 +123,8 @@ class bruger {
 
 function studienr_exists($studienr){
     include("./config/db_connect.php"); // Forbinder til databasen.
-    $sqli = "SELECT * FROM `konstituerede` WHERE studienr=('$studienr');";
-    $result = mysqli_query($db, $sqli);;
+    $sqli = "SELECT * FROM `medlemmer` WHERE studienr=('$studienr');";
+    $result = mysqli_query($db, $sqli);
     if (mysqli_fetch_array($result) == null){
         return false;
     }
@@ -165,7 +134,7 @@ function studienr_exists($studienr){
 function add_konstiueret($studienr, $navn, $email, $telefonnr){
     include("./config/db_connect.php"); // Forbinder til databasen.
     //setup sql query
-    $sql = "INSERT INTO `konstituerede`( `studienr`, `navn`, `email`, `telefonnr`, `point`) VALUES (
+    $sql = "INSERT INTO `medlemmer`( `studienr`, `navn`, `email`, `telefonnr`, `point`) VALUES (
         '$studienr',
         '$navn',
         '$email',
