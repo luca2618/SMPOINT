@@ -29,7 +29,7 @@ include('./user-authentication/controllers/register.php'); ?>
 
                     <div class="form-group">
                         <label>Name</label>
-                        <input type="text" class="form-control" name="name" id="name" />
+                        <input type="text" class="form-control" name="name" id="name" autocomplete="off" />
 
                         <?php echo $NameEmptyErr; ?>
                         <?php echo $NameErr; ?>
@@ -37,7 +37,7 @@ include('./user-authentication/controllers/register.php'); ?>
 
                     <div class="form-group">
                         <label>Email</label>
-                        <input type="email" class="form-control" name="email" id="email" />
+                        <input type="email" class="form-control" name="email" id="email" autocomplete="off" />
 
                         <?php echo $_emailErr; ?>
                         <?php echo $emailEmptyErr; ?>
@@ -45,7 +45,7 @@ include('./user-authentication/controllers/register.php'); ?>
 
                     <div class="form-group">
                         <label>Password</label>
-                        <input type="password" class="form-control" name="password" id="password" />
+                        <input type="password" class="form-control" name="password" id="password" autocomplete="off" />
                         <?php echo $status; ?>
                         <?php echo $_passwordErr; ?>
                         <?php echo $passwordEmptyErr; ?>

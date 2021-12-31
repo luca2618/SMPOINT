@@ -42,6 +42,10 @@
                 <a class="navbar-link" href="./manager">Manage</a>
                 </li>
 
+                <li class="nav-item">
+                <a class="navbar-link" href="./opsetning">Opsætning</a>
+                </li>
+
                 <li class="nav.item" style="float:right">
                     <a class="navbar-link" href="./signup">Sign up</a>
                 </li>

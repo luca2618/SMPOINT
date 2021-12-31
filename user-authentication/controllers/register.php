@@ -16,7 +16,7 @@
         $password      = $_POST["password"];
 
         // check if email already exist
-        $email_check_query = mysqli_query($connection, "SELECT * FROM users WHERE email = '{$email}' ");
+        $email_check_query = mysqli_query($connection, "SELECT * FROM admins WHERE email = '{$email}' ");
         $rowCount = mysqli_num_rows($email_check_query);
 
 
@@ -60,7 +60,7 @@
                     $password_hash = password_hash($password, PASSWORD_BCRYPT);
                     $today = date('d/m/Y');
                     // Query
-                    $sql = "INSERT INTO `users` (`name`, `email`, `password`, `role`, `date_time`) 
+                    $sql = "INSERT INTO `admins` (`name`, `email`, `password`, `role`, `date_time`) 
                     VALUES ('$name', '$email', '$password_hash','2', '$today')";
                     $status = "succes";
                     // Create mysql query

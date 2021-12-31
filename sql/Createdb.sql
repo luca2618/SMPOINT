@@ -13,7 +13,7 @@ CREATE TABLE `medlemmer`(
     `navn` VARCHAR(255) NOT NULL,
     `email` VARCHAR(255) NOT NULL,
     `telefonnr` VARCHAR(255) NOT NULL,
-    `point` INT(255) NOT NULL,
+    `point` FLOAT NOT NULL,
     `card_id` VARCHAR(255)
 );
 
@@ -42,8 +42,8 @@ CREATE TABLE `aktiviteter` (
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `studienr` VARCHAR(255),
     `aktivitet` VARCHAR(255), -- (meeting, defined activity, free activity)
-    `refference_id` INT(255), -- if its a meeting its mode_id, for predfined activities its the aktivitet types id
-    `point` INT(255),
+    `guest_name` VARCHAR(255), 
+    `point` FLOAT,
     `kommentar` VARCHAR(255),
     `dato` DATE NOT NULL);
 

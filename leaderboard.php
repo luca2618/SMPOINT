@@ -16,7 +16,6 @@ echo("<br><br>");
 $sqli = "SELECT * FROM `medlemmer` ORDER BY `point`+0 DESC";
 $result = mysqli_query($db, $sqli);
 
-console_log($result);
 
 if ($result != False){
     $ranknr = 0;

@@ -40,13 +40,12 @@ class bruger {
     function addpoint($points, $aktivitet, $kommentar, $dato) {
         // Forbinder til databasen.
         include("./config/db_connect.php"); 
-
+        $points = str_replace(",",".",$points);
         //tilføjer aktivitet til brugeren
         $insertSQL = "INSERT INTO `aktiviteter` (`studienr`, `aktivitet`, `point`, `kommentar`, `dato`) 
         VALUES ('$this->studienr', '$aktivitet', '$points', '$kommentar' , '$dato')";
         $result = mysqli_query($db, $insertSQL);
-        console_log($insertSQL);
-        //$this->update();
+        $this->update_points();
     }
 
     function deletepoint($pointid){
@@ -69,14 +68,14 @@ class bruger {
         $result = mysqli_query($db, $insertSQL);
         
         //on succes update points and return true
-        $this->update();
+        $this->update_points();
         return true;
     }
 
     //Checker om brugeren har fremmødt
     function fremmødt() {
         include("./config/db_connect.php"); // Forbinder til databasen.
-        $dato = date('d/m/Y');
+        $dato = date('Y-m-d');
         if (!$this->studienr_exists()){
             exit("Ikke konstitueret medlem");
         }
@@ -84,19 +83,18 @@ class bruger {
         $sqli = "SELECT * FROM `aktiviteter` WHERE (`dato`='$dato' AND `aktivitet`='studierådsmøde' AND `studienr` = '$this->studienr')";
         $result = mysqli_query($db, $sqli);
         $data= mysqli_fetch_array($result);
-        console_log($data);
         if ($data == NULL){
             $points = 1;
             $kommentar = "Fremmødt";
             $aktivitet = "Studierådsmøde";
     
             $this->addpoint($points, $aktivitet, $kommentar);
-            $this->update();
+            $this->update_points();
             }
     }
     
     //Opdaterer brugerens point
-    function update(){
+    function update_points(){
         include("./config/db_connect.php"); // Forbinder til databasen.
         $sql="SELECT sum(`point`) as total FROM `aktiviteter` WHERE studienr=('$this->studienr')";
 
@@ -106,8 +104,19 @@ class bruger {
         { 
         $this->point = $row['total'];
         }
-        $sqli = "UPDATE `medlemmer` SET point=('$this->point') WHERE studienr=('$this->studienr')";
+        $sqli = "UPDATE `medlemmer` SET `point`=('$this->point') WHERE studienr=('$this->studienr')";
         $result = mysqli_query($db, $sqli);
+    }
+
+    function update($columm, $value){
+        include("./config/db_connect.php"); // Forbinder til databasen.
+        $value = mysqli_real_escape_string($db,$value);
+        $sqli = "UPDATE `medlemmer` SET `$columm` =('$value') WHERE studienr=('$this->studienr')";
+        // mysqli_query returns true or false when trying to update value.
+        $result = mysqli_query($db, $sqli);
+        return $result;
+
+
     }
 
     function studienr_exists(){
@@ -150,12 +159,47 @@ function add_konstiueret($studienr, $navn, $email, $telefonnr){
     }
 }
 
+function add_aktivitet_type($aktivitet, $point, $forklaring){
+        include("./config/db_connect.php");
+        $aktivitet = mysqli_real_escape_string($db,$aktivitet);
+        $forklaring = mysqli_real_escape_string($db,$forklaring);
+        $sqlicheck = "SELECT * FROM `aktivitet_typer` WHERE `Aktivitet` = '$aktivitet'; ";
+        $result = mysqli_query($db, $sqlicheck);
+        if(mysqli_fetch_array($result) == null){
+        $sqli = "INSERT INTO  `aktivitet_typer` (`Aktivitet`, `Point`, `Forklaring`) 
+            VALUES ('$aktivitet', '$point', '$forklaring'); ";
+        $result = mysqli_query($db, $sqli);
+        return true;
+        }
+        return false;
+}
 
+function guest_fremmødt($studienr, $navn) {
+    include("./config/db_connect.php"); // Forbinder til databasen.
+    $dato = date('Y-m-d');
+    if (!$this->studienr_exists()){
+        exit("Ikke konstitueret medlem");
+    }
+
+    $sqli = "SELECT * FROM `aktiviteter` WHERE (`dato`='$dato' AND `aktivitet`='studierådsmøde' AND `studienr` = '$studienr')";
+    $result = mysqli_query($db, $sqli);
+    $data= mysqli_fetch_array($result);
+    if ($data == NULL){
+        $points = 1;
+        $kommentar = "Fremmødt";
+        $aktivitet = "Studierådsmøde";
+
+        $insertSQL = "INSERT INTO `aktiviteter` (`studienr`, `aktivitet`, `point`, `kommentar`, `dato`, `guest_name`) 
+        VALUES ('$this->studienr', '$aktivitet', '$points', '$kommentar' , '$dato', '$name')";
+        $result = mysqli_query($db, $insertSQL);
+        }
+}
 
 function console_log( $data ){
     echo '<script>';
     echo 'console.log('. json_encode( $data ) .')';
     echo '</script>';
   }
+
 
 ?>

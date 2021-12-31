@@ -30,6 +30,7 @@ any('/signup', 'user-authentication/signup.php');
 any('/addpoint', 'addpoint.php');
 
 any('/manager', 'manager.php');
+any('/opsetning', 'opsætning.php');
 
 //error routes
 any('/404','404.php');
