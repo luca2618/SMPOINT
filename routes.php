@@ -16,6 +16,8 @@ get('', 'home.php');
 
 any('/search', 'search.php');
 
+any('/meetings', 'meetings.php');
+
 get('/leaderboard','leaderboard.php');
 
 get('/kontakt','kontakt.php');

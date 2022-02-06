@@ -9,7 +9,7 @@
 </head>
 
 
-
+<body>
 <?php
 include("./navbar/Navbar.php"); // Indkluderer navbar.
 include("user_class.php");

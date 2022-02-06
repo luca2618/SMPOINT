@@ -31,7 +31,7 @@ if ($result != False){
         while($row = $result->fetch_assoc()) {
             $ranknr += 1;
             echo("<tr> <th> " . $ranknr. "</th><th>" . $row["navn"]. "</th><th>"
-            ."<a class=\"link\"  href=\"./search?studienr=". $row["studienr"]."\">". $row["studienr"]."</a>" . "</th><th>" . $row["point"]. "</th></tr>");
+            ."<a class=\"link\"  href=\"./search?studienr=". $row["studienr"]."&submit=Search\">". $row["studienr"]."</a>" . "</th><th>" . $row["point"]. "</th></tr>");
         }
     } else {
         echo ("<th>0 results</th>");

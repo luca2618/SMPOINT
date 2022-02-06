@@ -20,6 +20,9 @@
             <li class="nav-item">
                 <a class="navbar-link" href="./checkin">Check in</a>
             </li>
+            <li class="nav-item">
+                <a class="navbar-link" href="./meetings">Møder</a>
+            </li>
 
             <?php
             if(!isset($_SESSION['id'])){ // De næste inde i dette if-statement er kun vist, hvis man ikke er logget ind.

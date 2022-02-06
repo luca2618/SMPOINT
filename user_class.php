@@ -88,7 +88,7 @@ class bruger {
             $kommentar = "Fremmødt";
             $aktivitet = "Studierådsmøde";
     
-            $this->addpoint($points, $aktivitet, $kommentar);
+            $this->addpoint($points, $aktivitet, $kommentar, $dato);
             $this->update_points();
             }
     }

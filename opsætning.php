@@ -114,30 +114,39 @@ if (isset($_SESSION['role']) && ($_SESSION['role']>1) && isset($_POST['submit'])
                     break;
 
                     
-                        case "Tilføj aktivitetstype liste":
-                            $succes = 0;
-                            $entries = 0;
-                            $tmpName = $_FILES['a_type_liste']['tmp_name'];
-                            $csvAsArray = array_map('str_getcsv', file($tmpName));
-                            //konstitueringslisterne starter på række 2 og indeholder i rækkefølge:
-                            //'Fulde Navn', 'Studienr.', 'aktivitet', 'dato', 'kommentar', 'points'
-                            for ($row = 1; $row<sizeof($csvAsArray); $row++){
-                                $aktivitet = $csvAsArray[$row][0];
-                                $point = $csvAsArray[$row][1];
-                                $forklaring = $csvAsArray[$row][2];
-                                $sqlicheck = "SELECT * FROM `aktivitet_typer` WHERE `Aktivitet` = '$aktivitet'; ";
-                                $result = mysqli_query($db, $sqlicheck);
-                                if (trim($aktivitet) != ""){
-                                    if(add_aktivitet_type($aktivitet,$point,$forklaring)){
-                                    $succes++;
-                                    }
-                                    $entries++;
+                    case "Tilføj aktivitetstype liste":
+                        $succes = 0;
+                        $entries = 0;
+                        $tmpName = $_FILES['a_type_liste']['tmp_name'];
+                        $csvAsArray = array_map('str_getcsv', file($tmpName));
+                        //konstitueringslisterne starter på række 2 og indeholder i rækkefølge:
+                        //'Fulde Navn', 'Studienr.', 'aktivitet', 'dato', 'kommentar', 'points'
+                        for ($row = 1; $row<sizeof($csvAsArray); $row++){
+                            $aktivitet = $csvAsArray[$row][0];
+                            $point = $csvAsArray[$row][1];
+                            $forklaring = $csvAsArray[$row][2];
+                            $sqlicheck = "SELECT * FROM `aktivitet_typer` WHERE `Aktivitet` = '$aktivitet'; ";
+                            $result = mysqli_query($db, $sqlicheck);
+                            if (trim($aktivitet) != ""){
+                                if(add_aktivitet_type($aktivitet,$point,$forklaring)){
+                                $succes++;
                                 }
+                                $entries++;
                             }
-                            $tilføj_aktivitet_option_message = "Succes på ".$succes." ud af ".$entries;
+                        }
+                        $tilføj_aktivitet_option_message = "Succes på ".$succes." ud af ".$entries;
 
 
-                        break;
+                    break;
+
+                    case "Tilføj aktivitetstype":
+                        if (isset($_POST['aktivitetsnavn'])){
+                            $aktivitet = $_POST['aktivitetsnavn'];
+                            $point = $_POST['pointvalue'];
+                            $forklaring = $_POST['forklaring'];
+                            add_aktivitet_type($aktivitet, $point, $forklaring);
+                        }
+                    break;
 
                         
 
@@ -151,7 +160,7 @@ if (isset($_SESSION['role']) && ($_SESSION['role']>1) && isset($_POST['submit'])
 <div class="row">
 <!--Form for importing a "konstituerings liste" into the database(from row 6 and beyond)-->
 <div style="" class="column">
-    <form action="" method="post" class="form" enctype="multipart/form-data">
+    <form action="" method="post" class="form" enctype="multipart/form-data"  onsubmit="return confirm('Are you sure you want to submit?');">>
     <text class="title">Import konstitueret liste</text>
     <br>
     <text class="formtekst">
@@ -178,7 +187,7 @@ if (isset($_SESSION['role']) && ($_SESSION['role']>1) && isset($_POST['submit'])
 <br><br>
 <!--Form for import aktivities that members have performed, into the database-->
 <div style="" class="column">
-    <form action="" method="post" class="form" enctype="multipart/form-data">
+    <form action="" method="post" class="form" enctype="multipart/form-data"  onsubmit="return confirm('THIS IS A MESS TO FIX IF YOU FUCK UP, ARE YOU SURE?');">>
     <text class="title">Import aktivitetsliste</text>
     <br>
     <text class="formtekst">
@@ -199,7 +208,7 @@ if (isset($_SESSION['role']) && ($_SESSION['role']>1) && isset($_POST['submit'])
 </div>
 <!--Form for importing list of attending members into the database-->
 <div style="" class="column">
-    <form action="" method="post" class="form" enctype="multipart/form-data">
+    <form action="" method="post" class="form" enctype="multipart/form-data" onsubmit="return confirm('THIS IS A MESS TO FIX IF YOU FUCK UP, ARE YOU SURE?');">
     <text class="title">Import mødeliste</text>
     <br>
     <text class="formtekst">
@@ -226,7 +235,30 @@ if (isset($_SESSION['role']) && ($_SESSION['role']>1) && isset($_POST['submit'])
 <div class="row">
 <!--Form for -->
 <div style="" class="column">
+    <form action="" method="post" class="form">
+    <text class="title">Tilføj aktivitetstype</text><br>
 
+    <div class="input-container ic1">
+    <input type="text" id="aktivitetsnavn" name="aktivitetsnavn" required autocomplete="off" autofill="off" class="input" placeholder=" ">
+    <div class="cut"></div>
+    <label for="aktivitetsnavn" class="placeholder">Aktivitetsnavn:</label>
+    </div>
+
+    <div class="input-container ic1">
+    <input type="number" step="0.01" min=0 id="pointvalue" name="pointvalue" required autocomplete="off" autofill="off" class="input" placeholder=" ">
+    <div class="cut"></div>
+    <label for="pointvalue" class="placeholder">pointvalue:</label>
+    </div>
+
+    <div class="input-container ic1">
+    <input type="text" id="forklaring" name="forklaring" required autocomplete="off" autofill="off" class="input" placeholder=" ">
+    <div class="cut"></div>
+    <label for="forklaring" class="placeholder">forklaring:</label>
+    </div>
+    
+    
+    <input type="submit" value="Tilføj aktivitetstype" name="submit" class="submit">
+    </form>
 </div>
 
 
