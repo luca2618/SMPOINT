@@ -11,6 +11,7 @@
 
 <body>
 <?php 
+//t
 include("./navbar/Navbar.php"); // Indkluderer navbar.
 include("./config/db_connect.php"); // Forbinder til databasen.
 include("user_class.php");
