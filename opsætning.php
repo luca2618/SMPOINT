@@ -54,7 +54,7 @@ if (isset($_SESSION['role']) && ($_SESSION['role']>1) && isset($_POST['submit'])
                 $entries = 0;
                 $tmpName = $_FILES['a_liste']['tmp_name'];
                 $csvAsArray = array_map('str_getcsv', file($tmpName));
-                //konstitueringslisterne starter på række 2 og indeholder i rækkefølge:
+                //Aktivitetslisterne starter på række 2 og indeholder i rækkefølge:
                 //'Fulde Navn', 'Studienr.', 'aktivitet', 'dato', 'kommentar', 'points'
                 for ($row = 1; $row<sizeof($csvAsArray); $row++){
                     $navn = $csvAsArray[$row][0];
@@ -119,11 +119,10 @@ if (isset($_SESSION['role']) && ($_SESSION['role']>1) && isset($_POST['submit'])
                         $entries = 0;
                         $tmpName = $_FILES['a_type_liste']['tmp_name'];
                         $csvAsArray = array_map('str_getcsv', file($tmpName));
-                        //konstitueringslisterne starter på række 2 og indeholder i rækkefølge:
-                        //'Fulde Navn', 'Studienr.', 'aktivitet', 'dato', 'kommentar', 'points'
                         for ($row = 1; $row<sizeof($csvAsArray); $row++){
                             $aktivitet = $csvAsArray[$row][0];
-                            $point = $csvAsArray[$row][1];
+                            //skifter fra komma seperation for decimaler til punktum.
+                            $point = str_replace(',', '.', $csvAsArray[$row][1]);
                             $forklaring = $csvAsArray[$row][2];
                             $sqlicheck = "SELECT * FROM `aktivitet_typer` WHERE `Aktivitet` = '$aktivitet'; ";
                             $result = mysqli_query($db, $sqlicheck);
@@ -192,7 +191,7 @@ if (isset($_SESSION['role']) && ($_SESSION['role']>1) && isset($_POST['submit'])
     <br>
     <text class="formtekst">
     Tager udgangspunkt i formattering af listerne på drev.<br>
-    konstitueringslisterne starter på række 2 og indeholder i rækkefølge:<br>
+    aktivitetslisterne starter på række 2 og indeholder i rækkefølge:<br>
     'Navn', 'Studienr.', 'aktivitet', 'dato', 'kommentar', 'points'<br>
     Navn bruges ikke.</text>
     <text class="subtitle">
