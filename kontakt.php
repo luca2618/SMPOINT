@@ -9,7 +9,7 @@ include("./navbar/Navbar.php"); // Indkluderer navbar.
 <br>
 <h1> Kontakt </h1>
 <text>
-    Vedrørende fejl, bugs, forbedringsideer, sikkerhedsfejl mm. så kontakt venligst sylvester@smkid.dk
+    Vedrørende fejl, bugs, forbedringsideer, sikkerhedsfejl mm. så kontakt venligst <a href="mailto:sylvester@smkid.dk">sylvester@smkid.dk</a>
 <br>
 <br>
 </text>
