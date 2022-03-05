@@ -10,29 +10,14 @@
 
 
 <?php 
-include("./navbar/Navbar.php"); // Indkluderer navbar.
-include("./config/db_connect.php"); // Forbinder til databasen.
-include("user_class.php");
+include_once("./navbar/Navbar.php"); // Indkluderer navbar.
+include_once("./config/db_connect.php"); // Forbinder til databasen.
+include_once("user_class.php");
+include_once("name_fill.php");
 //variables for meeting form dates and stuff
 $today = date('Y-m-d');
-
 $konstituerede = fetch_konstituerede();
 ?>
-<script>
-            // Funktion der ændrer layoutet på siden, hver gang man ændrer navnet.
-            function Updatestudienr(){
-                var navn_værdi = document.getElementById('navn').value;
-                var konstituerede = <?php echo json_encode($konstituerede); ?>;
-                
-                for (i in konstituerede){
-                    if (navn_værdi === konstituerede[i]['navn']) {
-                        hide =true;
-                        document.getElementById("studienr").value = konstituerede[i]['studienr'];
-                    }
-
-                }
-            }
-            </script>
 
 
 
@@ -45,13 +30,11 @@ $konstituerede = fetch_konstituerede();
   <text class="title">Search</text><br>
   <text class="subtitle">Søg på studie nr. eller navn for at hente aktiviter og information</text>
 
-  <div class="input-container ic1">
-  
-  <input list="navneliste" id="navn" name="navn" required autocomplete="off" onkeyup="Updatestudienr();" class="input" placeholder=" "><br><br>
+<div class="input-container ic1"> 
+  <input list="navneliste" id="navn" name="navn" autocomplete="off" onkeyup="Updatestudienr();" class="input" placeholder=" "><br><br>
   <div class="cut"></div>
   <datalist id="navneliste">
   <?php
-  console_log($konstituerede);
   foreach ($konstituerede as $medlem){
     echo("<option value=\"");
     echo($medlem['navn']);
@@ -59,16 +42,24 @@ $konstituerede = fetch_konstituerede();
   }
   ?>
   </datalist>
-
   <label for="Navn" class="placeholder">Navn:</label>
 </div>
 
+<div class="input-container ic1"> 
+  <input list="studienrliste" id="studienr" name="studienr" required autocomplete="off" onkeyup="Updatenavn();" class="input" placeholder=" "><br><br>
+  <div class="cut"></div>
+  <datalist id="studienrliste">
+  <?php
+  foreach ($konstituerede as $medlem){
+    echo("<option value=\"");
+    echo($medlem['studienr']);
+    echo("\">");
+  }
+  ?>
+  </datalist>
+  <label for="studienr" class="placeholder">Studienr:</label>
+</div>
 
-  <div class="input-container ic1">
-    <input type="text" id="studienr" name="studienr" class="input" placeholder=" "><br><br>
-    <div class="cut"></div>
-    <label for="studienr" class="placeholder">Studienr:</label>
-  </div>
 
 
 
@@ -113,7 +104,6 @@ switch ($_GET['submit']) {
           <th>Dato</th>
           </tr>");
           foreach ($result as $row) {
-            console_log($result);
               echo("<tr> <th>id: " . $row["id"]. "</th><th> " . $row["aktivitet"]. "</th><th>"
               . $row["point"] . "</th><th>" . $row["kommentar"]. "</th><th>" . $row["dato"] . "</th></tr>");
           }

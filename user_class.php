@@ -28,7 +28,7 @@ class bruger {
         $this->telefonnr = $data['telefonnr'];  
         $this->email = $data['email'];
 
-        $aktiviteter_sqli = "SELECT * FROM `aktiviteter` WHERE studienr=('$studienr')";
+        $aktiviteter_sqli = "SELECT * FROM `aktiviteter` WHERE studienr=('$studienr') ORDER BY id DESC";
         $aktiviteter_result = mysqli_query($db, $aktiviteter_sqli);
         while ($row = mysqli_fetch_assoc($aktiviteter_result)) {
             $this->aktivitets_liste[] = $row; // Inside while loop

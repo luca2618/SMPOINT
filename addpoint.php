@@ -12,6 +12,11 @@
 include("./navbar/Navbar.php"); // Indkluderer navbar.
 include("user_class.php");
 include("./config/db_connect.php"); // Forbinder til databasen.
+include_once("name_fill.php");
+
+$konstituerede = fetch_konstituerede();
+
+
 $sqli = "SELECT * FROM `aktivitet_typer` ORDER BY `type_id` ASC";
 $result = mysqli_query($db, $sqli);
 
@@ -41,19 +46,6 @@ if ((isset($_SESSION['role']) && $_SESSION['role']>1)){
                     }
 
                 }
-                //This if statement hides alle the prefilled
-                /*
-                if (hide != true){
-                        for (i = 0; i < prefill_elements.length; i++) {
-                            prefill_elements[i].style.display = "inline";
-                        }
-                    }
-                    else 
-                    {
-                        for (i = 0; i < prefill_elements.length; i++) {
-                            prefill_elements[i].style.display = "none";
-                        }
-                    }*/
             }
             </script>
 
@@ -61,11 +53,38 @@ if ((isset($_SESSION['role']) && $_SESSION['role']>1)){
 
 <form action="" method="post" class="form">
 <text class="title">Add points</text>
-<div class="input-container ic1">
-  <input type="text" id="studienr" name="studienr" required class="input" placeholder=" "><br><br>
+
+<div class="input-container ic1"> 
+  <input list="navneliste" id="navn" name="navn" autocomplete="off" onkeyup="Updatestudienr();" class="input" placeholder=" "><br><br>
   <div class="cut"></div>
+  <datalist id="navneliste">
+  <?php
+  foreach ($konstituerede as $medlem){
+    echo("<option value=\"");
+    echo($medlem['navn']);
+    echo("\">");
+  }
+  ?>
+  </datalist>
+  <label for="Navn" class="placeholder">Navn:</label>
+</div>
+
+<div class="input-container ic1"> 
+  <input list="studienrliste" id="studienr" name="studienr" required autocomplete="off" onkeyup="Updatenavn();" class="input" placeholder=" "><br><br>
+  <div class="cut"></div>
+  <datalist id="studienrliste">
+  <?php
+  foreach ($konstituerede as $medlem){
+    echo("<option value=\"");
+    echo($medlem['studienr']);
+    echo("\">");
+  }
+  ?>
+  </datalist>
   <label for="studienr" class="placeholder">Studienr:</label>
 </div>
+
+
 
 <div class="input-container ic1">
   

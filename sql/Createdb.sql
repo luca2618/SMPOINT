@@ -48,6 +48,16 @@ CREATE TABLE `aktiviteter` (
     `dato` DATE NOT NULL);
 
 
+CREATE TABLE `aktivitet_forslag` (
+    `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `studienr` VARCHAR(255),
+    `aktivitet` VARCHAR(255), -- (meeting, defined activity, free activity)
+    `standard_point` FLOAT, 
+    `point` FLOAT,
+    `kommentar` VARCHAR(255),
+    `dato` DATE NOT NULL);
+
+
 INSERT INTO `admins`( `name`, `email`, `role`, `password`, `date`) VALUES (
     'Lucas Sylvester',
     'l@gmail.com',
@@ -63,4 +73,6 @@ INSERT INTO `medlemmer`( `studienr`, `navn`, `email`, `telefonnr`, `point`) VALU
     'l@gmail.com',
     '40143444',
     '30');
+
+
 
