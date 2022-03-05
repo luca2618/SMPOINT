@@ -6,7 +6,7 @@
         <!-- Liste med elementer i navbaren. -->
         <ul class="navbar">
             <li class="nav-item">
-                <a class="navbar-link" href="./home">Home</a>
+                <a class="navbar-link" href="./h">Home</a>
             </li>
             <li class="nav-item">
                 <a class="navbar-link" href="./search">Search</a>

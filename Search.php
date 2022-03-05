@@ -16,14 +16,26 @@ include("user_class.php");
 //variables for meeting form dates and stuff
 $today = date('Y-m-d');
 
-
-
-
-
-
-
-
+$konstituerede = fetch_konstituerede();
 ?>
+<script>
+            // Funktion der ændrer layoutet på siden, hver gang man ændrer navnet.
+            function Updatestudienr(){
+                var navn_værdi = document.getElementById('navn').value;
+                var konstituerede = <?php echo json_encode($konstituerede); ?>;
+                
+                for (i in konstituerede){
+                    if (navn_værdi === konstituerede[i]['navn']) {
+                        hide =true;
+                        document.getElementById("studienr").value = konstituerede[i]['studienr'];
+                    }
+
+                }
+            }
+            </script>
+
+
+
 <br> <br>
 
 <div class="row">
@@ -31,36 +43,39 @@ $today = date('Y-m-d');
 <div style="" class="column">
   <form action="" method="get" class="form">
   <text class="title">Search</text><br>
-  <text class="subtitle">Søg på studie nr. for at hente aktiviter og information</text>
+  <text class="subtitle">Søg på studie nr. eller navn for at hente aktiviter og information</text>
+
+  <div class="input-container ic1">
+  
+  <input list="navneliste" id="navn" name="navn" required autocomplete="off" onkeyup="Updatestudienr();" class="input" placeholder=" "><br><br>
+  <div class="cut"></div>
+  <datalist id="navneliste">
+  <?php
+  console_log($konstituerede);
+  foreach ($konstituerede as $medlem){
+    echo("<option value=\"");
+    echo($medlem['navn']);
+    echo("\">");
+  }
+  ?>
+  </datalist>
+
+  <label for="Navn" class="placeholder">Navn:</label>
+</div>
+
 
   <div class="input-container ic1">
     <input type="text" id="studienr" name="studienr" class="input" placeholder=" "><br><br>
     <div class="cut"></div>
     <label for="studienr" class="placeholder">Studienr:</label>
   </div>
+
+
+
     <input type="submit" value="Search" name="submit" class="submit">
     </form>
 
 </div>
-
-<!--Form for searching meetings-->
-<div style="" class="column">
-  <form action="" method="get" class="form">
-      <text class="title">Søg møde</text>
-      <br>
-      <div class="input-container ic1">
-      <input type="date" id="dato" name="dato" required class="input" placeholder=" " 
-      <?php echo("value=\"$today\"
-        min=\"$today\" max=\"2025-12-31\"");?>><br><br>
-      <div class="cut"></div>
-      <label for="dato" class="placeholder">Dato:</label>
-      </div>
-
-      <input type="submit" value="Søg møde" name="submit" class="submit">
-
-      </form>
-  </div>
-
 
 
 
@@ -109,42 +124,8 @@ switch ($_GET['submit']) {
       mysqli_close($db);
   
       break;
-
-  case "Søg møde":
-        $møde_dato = $_GET['dato'];
-        $mødeliste_sqli = "SELECT * FROM `aktiviteter` WHERE (`aktivitet` = 'Studierådsmøde' and `dato` = '$møde_dato') " ;
-        $mødeliste_result = mysqli_query($db, $mødeliste_sqli);
-        echo("<div class=\"bluebox\">");
-        echo("<text class=\"subtitle\"> ");
-        if ($mødeliste_result != null)  {
-          
-          // output data of each row
-          echo("
-          <table>
-          <tr>
-          <th>Studienr</th>
-          <th>Navn</th>
-          <th>Konstitueret</th>
-          <th>Kommentar</th>
-          </tr>");
-          foreach ($mødeliste_result as $row) {
-              $person = new bruger($row["studienr"]);
-              $navn = $person->navn;
-              $konstitueret = "Ja";
-
-              echo("<tr> <th>" . "<a class=\"link\"  href=\"./search?studienr=". $row["studienr"]."&submit=Search\">". $row["studienr"]."</a>"
-              . "</th><th> " . $navn. "</th><th>"
-              . $konstitueret . "</th><th>" . $row["kommentar"]. "</th></tr>");
-          }
-          } else {
-              echo ("<br><br><th>0 results</th><br>");
-          }
-
-          echo("</div>");
-            break;
-          }
         
-  
+    }
 }
 ?>
 <div>

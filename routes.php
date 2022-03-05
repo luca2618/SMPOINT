@@ -11,10 +11,10 @@ require_once("{$_SERVER['DOCUMENT_ROOT']}/router.php");
 // The output -> Index
 //main and public routes
 get('/', 'home.php');
-get('/home', 'home.php');
+get('/h', 'home.php');
 get('', 'home.php');
 
-any('/search', 'search.php');
+any('/search', 'Search.php');
 
 any('/meetings', 'meetings.php');
 

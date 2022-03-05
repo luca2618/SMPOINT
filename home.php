@@ -28,32 +28,10 @@ Her kan du hvilket point du selv og andre har opnået, samt
 <tekst> Du får SM-KID point ved at udføre forskellige frivillige opgaver i SM-KID rådet, og ved at møde op til studierådsmøderne.  <br><br></tekst>
 
 <?php
-include("./config/db_connect.php"); // Forbinder til databasen.
-$sqli = "SELECT * FROM `aktivitet_typer` ORDER BY `type_id` ASC";
-$result = mysqli_query($db, $sqli);
 
-console_log($sqli);
+fetch_aktivitetstype($print=true);
 
-if ($result != False){
-    $ranknr = 0;
-    if ($result->num_rows > 0)  {
-        // output data of each row
-        echo("<table>
-        <tr>
-        <th>Aktivitet</th>
-        <th>Point</th>
-        <th>Forklaring</th>
-        </tr>");
-        while($row = $result->fetch_assoc()) {
-            $ranknr += 1;
-            echo("<tr> <th> " . $row["Aktivitet"]. "</th><th>" . $row["Point"]. "</th><th>" . $row["Forklaring"]. "</th></tr>");
-        }
-    } else {
-        echo ("<th>0 results</th>");
-    }
-    echo("</table>");
-    mysqli_close($db);
-    }
+
 ?>
 
 <h2> Hvad kan jeg bruge SM-KID point til?</h2>

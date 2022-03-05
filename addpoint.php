@@ -123,7 +123,8 @@ if ((isset($_POST['password']) &&  (strcmp(hash('md5',$_POST['password']),"81dc9
     $aktivitet = $_POST['aktivitet'];
     $points = $_POST['points'];
     $kommentar = $_POST['kommentar'];
-    
+    $dato = date('Y-m-d');
+
     $user = new bruger($studienr);
     $points = trim($points);
     if (! (is_numeric($points))){
@@ -134,7 +135,7 @@ if ((isset($_POST['password']) &&  (strcmp(hash('md5',$_POST['password']),"81dc9
     if (strcasecmp($aktivitet, "studierådsmøde") == 0){
         $user->fremmødt();
     }else{
-        $user->addpoint($points, $aktivitet, $kommentar);
+        $user->addpoint($points, $aktivitet, $kommentar, $dato);
         }
 
 }

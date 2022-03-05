@@ -202,4 +202,80 @@ function console_log( $data ){
   }
 
 
+
+function fetch_aktivitetstype($print=false){
+    include("./config/db_connect.php"); // Forbinder til databasen. 
+    $sqli = "SELECT * FROM `aktivitet_typer` ORDER BY `type_id` ASC";
+    $result = mysqli_query($db, $sqli);
+    $data= mysqli_fetch_all($result);
+    console_log($data);
+    if (($result != False) and ($print==true)){
+        $ranknr = 0;
+        mysqli_data_seek($result, 0);
+        if ($result->num_rows > 0)  {
+            //reset data pointer of mysql result object
+            // output data of each row
+            echo("<table>
+            <tr>
+            <th>Aktivitet</th>
+            <th>Point</th>
+            <th>Forklaring</th>
+            </tr>");
+            while($row = $result->fetch_assoc()) {
+                $ranknr += 1;
+                echo("<tr> <th> " . $row["Aktivitet"]. "</th><th>" . $row["Point"]. "</th><th>" . $row["Forklaring"]. "</th></tr>");
+            }
+        } else {
+            echo ("<th>0 results</th>");
+        }
+        echo("</table>");
+        mysqli_close($db);
+        }
+        return $data;
+    }
+    
+    function fetch_leaderboard($print=false){
+        include("./config/db_connect.php"); // Forbinder til databasen. 
+        //+0 to make sure its handled as numbers
+        $sqli = "SELECT * FROM `medlemmer` ORDER BY `point`+0 DESC";
+        $result = mysqli_query($db, $sqli);
+        $data = mysqli_fetch_all($result,MYSQLI_ASSOC);
+        if (($result != False) and ($print==true)){
+            $ranknr = 0;
+            mysqli_data_seek($result, 0);
+            if ($result->num_rows > 0)  {
+                // output data of each row
+                echo("<table>
+                <tr>
+                <th>Rank</th>
+                <th>Navn</th>
+                <th>Studienr</th>
+                <th>Point</th>
+                </tr>");
+                while($row = $result->fetch_assoc()) {
+                    $ranknr += 1;
+                    echo("<tr> <th> " . $ranknr. "</th><th>" . $row["navn"]. "</th><th>"
+                    ."<a class=\"link\"  href=\"./search?studienr=". $row["studienr"]."&submit=Search\">". $row["studienr"]."</a>" . "</th><th>" . $row["point"]. "</th></tr>");
+                }
+            } else {
+                echo ("<th>0 results</th>");
+            }
+            echo("</table>");
+            mysqli_close($db);
+            }
+            return $data;
+    }
+    function fetch_konstituerede(){
+        include("./config/db_connect.php"); // Forbinder til databasen. 
+        //+0 to make sure its handled as numbers
+        $sqli = "SELECT * FROM `medlemmer`";
+        $result = mysqli_query($db, $sqli);
+        $data = mysqli_fetch_all($result,MYSQLI_ASSOC);
+        return $data;
+    }
+    
+
+
+
+
 ?>

@@ -153,7 +153,7 @@ if (isset($_SESSION['role']) && ($_SESSION['role']>1) && isset($_POST['submit'])
     <div class="input-container ic1">
     <input type="date" id="dato" name="dato" required class="input" placeholder=" " 
     <?php echo("value=\"$today\"
-       min=\"$today\" max=\"2025-12-31\"");?>><br><br>
+       min=\"2000-01-01\" max=\"2025-12-31\"");?>><br><br>
     <div class="cut"></div>
     <label for="dato" class="placeholder">Dato:</label>
     </div>

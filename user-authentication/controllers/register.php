@@ -58,9 +58,9 @@
                 if((preg_match("/^[a-zA-Z ]*$/", $_name)) && (preg_match("/^(?=.*\d)(?=.*[@#\-_$%^&+=§!\?])(?=.*[a-z])(?=.*[A-Z])[0-9A-Za-z@#\-_$%^&+=§!\?]{8,20}$/", $_password))){
                     // Password hash
                     $password_hash = password_hash($password, PASSWORD_BCRYPT);
-                    $today = date('d/m/Y');
+                    $today = date('Y/m/d');
                     // Query
-                    $sql = "INSERT INTO `admins` (`name`, `email`, `password`, `role`, `date_time`) 
+                    $sql = "INSERT INTO `admins` (`name`, `email`, `password`, `role`, `date`) 
                     VALUES ('$name', '$email', '$password_hash','2', '$today')";
                     $status = "succes";
                     // Create mysql query
