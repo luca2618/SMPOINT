@@ -53,7 +53,8 @@ while ($row = mysqli_fetch_assoc($result)) {
             </script>
 
 
-
+<div class="row">
+<div style="" class="column">
 <form action="" method="post" class="form">
 <text class="title">Add points</text>
 
@@ -130,9 +131,92 @@ while ($row = mysqli_fetch_assoc($result)) {
 
   <input type="submit" value="Submit" name="submit" class="submit">
 </form>
+</div>
 
 <?php 
 if (isset($_SESSION['role']) && $_SESSION['role']>1){
+?>
+<div class="bluebox">
+<div style="" class="column">
+<text class="title"> Anmodninger om point </text><br><br>
+<text class="subtitle">Standard value er aktivitet med bestemt forudbestemte point værdier</text><br><br>
+<text class="subtitle">No standard er aktiviteter der ikke defineret og ikke har prebestemt værdi</text><br><br>
+<text class="subtitle">Wrong standard er aktivitet med standard point værdi,
+ men som har fået defineret en anden point værdi. Kan selvfølgelig være af god grund 
+ evt. beskrevet i kommentaren.</text>
+ <br><br>
+<?php
+  if (isset($_POST['submit']) && ($_POST['submit'] == "Approve")){
+    $studienr = $_POST['studienr'];
+    $medlem = new bruger($studienr);
+    $medlem->approvepoint($_POST['pointid']);
+  }
+  if (isset($_POST['submit']) && ($_POST['submit'] == "Disapprove")){
+    $studienr = $_POST['studienr'];
+    $medlem = new bruger($studienr);
+    $medlem->deletepoint($_POST['pointid']);
+  }
+  
+
+  include("./config/db_connect.php"); // Forbinder til databasen. 
+  $sqli = "SELECT * FROM `aktiviteter` WHERE `approved`='0' ORDER BY `id` ASC";
+  $result = mysqli_query($db, $sqli);
+    if ($result != False){
+            //reset data pointer of mysql result object
+            // output data of each row
+            echo("<table>
+            <tr>
+            <th>Navn</th>
+            <th>Aktivitet</th>
+            <th>Dato</th>
+            <th>Point</th>
+            <th>Kommentar</th>
+            <th>Standard value</th>
+            <th>Approve</th>
+            <th>Disapprove</th>
+            </tr>");
+            while($row = $result->fetch_assoc()) {
+                $medlem = new bruger($row["studienr"]);
+                $navn = $medlem->navn;
+                $aktivitetstyper = fetch_aktivitetstype();
+                $stardard_value = "No standard";
+                foreach ($aktivitetstyper as $aktivitetstype){
+                  if ($aktivitetstype[1] == $row["aktivitet"]){
+                    $stardard_value = "Wrong Standard";
+                    if ($aktivitetstype[2]==$row["point"]){
+                      $stardard_value = "Standard";
+                    }
+                  }
+                }
+
+
+                echo("<tr>
+                <th>" . $navn. "</th>
+                <th>" . $row["aktivitet"]. "</th>
+                <th>" . $row["dato"]. "</th>
+                <th>" . $row["point"]. "</th>
+                <th>" . $row["kommentar"]. "</th>
+                <th>" . $stardard_value. "</th>
+                <th>
+                  <form action=\"\" method=\"post\">
+                  <input type=\"hidden\" id=\"pointid\" name=\"pointid\" value=\"".$row['id']."\">
+                  <input type=\"hidden\" id=\"studienr\" name=\"studienr\" value=\"".$row['studienr']."\">
+                  <input type=\"submit\" value=\"Approve\" name=\"submit\" class=\"submit\">
+                  </form>
+                </th>
+                <th>
+                  <form action=\"\" method=\"post\">
+                  <input type=\"hidden\" id=\"pointid\" name=\"pointid\" value=\"".$row['id']."\">
+                  <input type=\"hidden\" id=\"studienr\" name=\"studienr\" value=\"".$row['studienr']."\">
+                  <input type=\"submit\" value=\"Disapprove\" name=\"submit\" class=\"submit\">
+                  </form>
+                </th>
+
+                </tr>");
+            }
+        echo("</table>");
+        }
+        echo("</div></div>");
 }
 ?>
 
@@ -159,7 +243,7 @@ if(isset($_POST['g-recaptcha-response'])){
 // is used of studie nr is not set card_id - used to identify student/studentnr
 include("./config/db_connect.php");
 // the && only runs first check if its false therefore no problem with $_SESSION['role'] as its only reffered to if $_SESSION['role'] exists.
-if (isset($_POST['submit']) && ($CAPTCHA_succes || (isset($_SESSION['role']) && $_SESSION['role']>1))){
+if (isset($_POST['submit']) && ($_POST['submit'] == "Submit")  && ($CAPTCHA_succes || (isset($_SESSION['role']) && $_SESSION['role']>1))){
     if (isset($_POST['studienr'])){
         $studienr = $_POST['studienr'];
     }elseif(isset($_POST['card_id'])){

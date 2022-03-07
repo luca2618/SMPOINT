@@ -26,7 +26,7 @@ $konstituerede = fetch_konstituerede();
 <div class="row">
 
 <div style="" class="column">
-  <form action="" method="get" class="form">
+<form action="" method="get" class="form">
   <text class="title">Search</text><br>
   <text class="subtitle">Søg på studie nr. eller navn for at hente aktiviter og information</text>
 

@@ -51,10 +51,6 @@ class bruger {
     function deletepoint($pointid){
         // Forbinder til databasen.
         include("./config/db_connect.php"); 
-        //check if studienr exists
-        if (!$this->studienr_exists()){
-            return false;
-        }
         //checkf først om id'et af aktiviteten findes
         $idsql = "SELECT * FROM `aktiviteter` WHERE (`id` = $pointid and `studienr` = '$this->studienr') LIMIT 1";
         $result = mysqli_query($db, $idsql);
@@ -70,6 +66,15 @@ class bruger {
         //on succes update points and return true
         $this->update_points();
         return true;
+    }
+
+    function approvepoint($pointid){
+        // Forbinder til databasen.
+        include("./config/db_connect.php"); 
+        //checkf først om id'et af aktiviteten findes
+        $idsql = "UPDATE `aktiviteter` SET `approved` = '1' WHERE `id` = '$pointid';";
+        $result = mysqli_query($db, $idsql);
+        return $result;
     }
 
     //Checker om brugeren har fremmødt
@@ -208,7 +213,6 @@ function fetch_aktivitetstype($print=false){
     $sqli = "SELECT * FROM `aktivitet_typer` ORDER BY `type_id` ASC";
     $result = mysqli_query($db, $sqli);
     $data= mysqli_fetch_all($result);
-    console_log($data);
     if (($result != False) and ($print==true)){
         $ranknr = 0;
         mysqli_data_seek($result, 0);
