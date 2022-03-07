@@ -23,6 +23,9 @@
             <li class="nav-item">
                 <a class="navbar-link" href="./meetings">Møder</a>
             </li>
+            <li class="nav-item">
+                <a class="navbar-link" href="./addpoint">Add points</a>
+            </li>
 
             <?php
             if(!isset($_SESSION['id'])){ // De næste inde i dette if-statement er kun vist, hvis man ikke er logget ind.
@@ -35,10 +38,6 @@
                     ?>
                 <li class="nav.item" style="float:right">
                     <a class="navbar-link" href="./logout">Logout</a>
-                </li>
-
-                <li class="nav-item">
-                <a class="navbar-link" href="./addpoint">Add points</a>
                 </li>
 
                 <li class="nav-item">

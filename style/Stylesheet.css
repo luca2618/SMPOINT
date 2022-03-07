@@ -44,8 +44,8 @@ tr:nth-child(odd) {
   border-radius: 20px;
   box-sizing: border-box;
   padding: 30px;
-  width: 320px;
-  margin: 10px;
+  width: 340px;
+  margin: 20px;
 }
 
 .login {

@@ -28,7 +28,7 @@ class bruger {
         $this->telefonnr = $data['telefonnr'];  
         $this->email = $data['email'];
 
-        $aktiviteter_sqli = "SELECT * FROM `aktiviteter` WHERE studienr=('$studienr') ORDER BY id DESC";
+        $aktiviteter_sqli = "SELECT * FROM `aktiviteter` WHERE studienr=('$studienr') AND approved='1' ORDER BY id DESC";
         $aktiviteter_result = mysqli_query($db, $aktiviteter_sqli);
         while ($row = mysqli_fetch_assoc($aktiviteter_result)) {
             $this->aktivitets_liste[] = $row; // Inside while loop
@@ -37,13 +37,13 @@ class bruger {
     }
 
     //tilføjer point til brugeren
-    function addpoint($points, $aktivitet, $kommentar, $dato) {
+    function addpoint($points, $aktivitet, $kommentar, $dato, $approved = '1') {
         // Forbinder til databasen.
         include("./config/db_connect.php"); 
         $points = str_replace(",",".",$points);
         //tilføjer aktivitet til brugeren
-        $insertSQL = "INSERT INTO `aktiviteter` (`studienr`, `aktivitet`, `point`, `kommentar`, `dato`) 
-        VALUES ('$this->studienr', '$aktivitet', '$points', '$kommentar' , '$dato')";
+        $insertSQL = "INSERT INTO `aktiviteter` (`studienr`, `aktivitet`, `point`, `kommentar`, `approved`, `dato`) 
+        VALUES ('$this->studienr', '$aktivitet', '$points', '$kommentar', '$approved' , '$dato')";
         $result = mysqli_query($db, $insertSQL);
         $this->update_points();
     }
@@ -96,7 +96,7 @@ class bruger {
     //Opdaterer brugerens point
     function update_points(){
         include("./config/db_connect.php"); // Forbinder til databasen.
-        $sql="SELECT sum(`point`) as total FROM `aktiviteter` WHERE studienr=('$this->studienr')";
+        $sql="SELECT sum(`point`) as total FROM `aktiviteter` WHERE studienr=('$this->studienr') AND approved=('1')";
 
         $result = mysqli_query($db, $sql);
 

@@ -45,18 +45,11 @@ CREATE TABLE `aktiviteter` (
     `guest_name` VARCHAR(255), 
     `point` FLOAT,
     `kommentar` VARCHAR(255),
+    `approved` BOOLEAN,
     `dato` DATE NOT NULL);
 
-
-CREATE TABLE `aktivitet_forslag` (
-    `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `studienr` VARCHAR(255),
-    `aktivitet` VARCHAR(255), -- (meeting, defined activity, free activity)
-    `standard_point` FLOAT, 
-    `point` FLOAT,
-    `kommentar` VARCHAR(255),
-    `dato` DATE NOT NULL);
-
+ALTER TABLE `aktiviteter` ADD `approved` BOOLEAN NOT NULL DEFAULT '1' AFTER `kommentar`;
+ALTER TABLE `aktiviteter` CHANGE `approved` `approved` BOOLEAN NULL DEFAULT '1';
 
 INSERT INTO `admins`( `name`, `email`, `role`, `password`, `date`) VALUES (
     'Lucas Sylvester',

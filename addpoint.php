@@ -6,6 +6,7 @@
         <title>Add point</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" defer></script> <!-- Tilføjer javascript-library "jqeury" -->
         <script src="https://requirejs.org/docs/release/2.3.5/minified/require.js" defer></script>
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <?php
 
@@ -16,6 +17,8 @@ include_once("name_fill.php");
 
 $konstituerede = fetch_konstituerede();
 
+//variables for meeting form dates and stuff
+$today = date('Y-m-d');
 
 $sqli = "SELECT * FROM `aktivitet_typer` ORDER BY `type_id` ASC";
 $result = mysqli_query($db, $sqli);
@@ -25,12 +28,12 @@ while ($row = mysqli_fetch_assoc($result)) {
  }
 
 
-if ((isset($_SESSION['role']) && $_SESSION['role']>1)){
+
 ?>
 
 <br> </br>
 <script>
-            // Funktion der ændrer layoutet på siden, hver gang man ændrer aktiviteten.
+            // Funktion der ændrer udfylder værdier på siden, hver gang man ændrer aktiviteten.
             function changeform(){
                 var aktivitet = document.getElementById('aktivitet').value;
                 var aktivitets_typer = <?php echo json_encode($aktivitets_typer); ?>;
@@ -84,7 +87,13 @@ if ((isset($_SESSION['role']) && $_SESSION['role']>1)){
   <label for="studienr" class="placeholder">Studienr:</label>
 </div>
 
-
+<div class="input-container ic1">
+    <input type="date" id="dato" name="dato" required class="input" placeholder=" " 
+    <?php echo("value=\"$today\"
+       min=\"2000-01-01\" max=\"2025-12-31\"");?>><br><br>
+    <div class="cut"></div>
+    <label for="dato" class="placeholder">Dato:</label>
+    </div>
 
 <div class="input-container ic1">
   
@@ -114,24 +123,43 @@ if ((isset($_SESSION['role']) && $_SESSION['role']>1)){
   <div class="cut"></div>
   <label for="points" class="prefill placeholder">Points:</label>
 </div>
+
+
+<br><br>
+<div class="g-recaptcha" data-sitekey="6Lcnh7weAAAAAJPuuq1PhC31cFwUsTNlwqitBCXv"></div>
+
   <input type="submit" value="Submit" name="submit" class="submit">
 </form>
 
 <?php 
+if (isset($_SESSION['role']) && $_SESSION['role']>1){
 }
 ?>
 
 
 
 <?php
+//https://codeforgeek.com/google-recaptcha-tutorial/
+if(isset($_POST['g-recaptcha-response'])){
+  $captcha=$_POST['g-recaptcha-response'];
+  $secretKey = $recaptcha_key; //insert in dataase config file
+  // post request to server
+  $url = 'https://www.google.com/recaptcha/api/siteverify?secret=' . urlencode($secretKey) .  '&response=' . urlencode($captcha);
+  $response = file_get_contents($url);
+  $responseKeys = json_decode($response,true);
+  $CAPTCHA_succes = $responseKeys["success"];
+
+
+
+}
+
 //inputs
 // password (acces password for adding points) (pass is 1234 now)
 // aktivitet (aktivitet deltaget i)
 // is used of studie nr is not set card_id - used to identify student/studentnr
 include("./config/db_connect.php");
 // the && only runs first check if its false therefore no problem with $_SESSION['role'] as its only reffered to if $_SESSION['role'] exists.
-if ((isset($_POST['password']) &&  (strcmp(hash('md5',$_POST['password']),"81dc9bdb52d04dc20036dbd8313ed055") == 0)) ||
-(isset($_SESSION['role']) && ($_SESSION['role']>1) && isset($_POST['submit']))){
+if (isset($_POST['submit']) && ($CAPTCHA_succes || (isset($_SESSION['role']) && $_SESSION['role']>1))){
     if (isset($_POST['studienr'])){
         $studienr = $_POST['studienr'];
     }elseif(isset($_POST['card_id'])){
@@ -142,7 +170,11 @@ if ((isset($_POST['password']) &&  (strcmp(hash('md5',$_POST['password']),"81dc9
     $aktivitet = $_POST['aktivitet'];
     $points = $_POST['points'];
     $kommentar = $_POST['kommentar'];
-    $dato = date('Y-m-d');
+    $dato =  $_POST['dato'];
+    $approved_status = 0;
+    if ((isset($_SESSION['role']) && $_SESSION['role']>1)){
+      $approved_status = 1; //set approved to true if its an admin who adds the point
+    }
 
     $user = new bruger($studienr);
     $points = trim($points);
@@ -154,7 +186,7 @@ if ((isset($_POST['password']) &&  (strcmp(hash('md5',$_POST['password']),"81dc9
     if (strcasecmp($aktivitet, "studierådsmøde") == 0){
         $user->fremmødt();
     }else{
-        $user->addpoint($points, $aktivitet, $kommentar, $dato);
+        $user->addpoint($points, $aktivitet, $kommentar, $dato, $approved = $approved_status);
         }
 
 }
