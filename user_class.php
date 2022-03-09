@@ -74,6 +74,9 @@ class bruger {
         //checkf først om id'et af aktiviteten findes
         $idsql = "UPDATE `aktiviteter` SET `approved` = '1' WHERE `id` = '$pointid';";
         $result = mysqli_query($db, $idsql);
+
+        $this->update_points();
+
         return $result;
     }
 
@@ -272,7 +275,7 @@ function fetch_aktivitetstype($print=false){
     function fetch_konstituerede(){
         include("./config/db_connect.php"); // Forbinder til databasen. 
         //+0 to make sure its handled as numbers
-        $sqli = "SELECT * FROM `medlemmer`";
+        $sqli = "SELECT * FROM `medlemmer` ORDER BY `navn` ASC";
         $result = mysqli_query($db, $sqli);
         $data = mysqli_fetch_all($result,MYSQLI_ASSOC);
         return $data;
