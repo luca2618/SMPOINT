@@ -266,12 +266,7 @@ if (isset($_POST['submit']) && ($_POST['submit'] == "Submit")  && ($CAPTCHA_succ
         exit("Error:non integer point value!");
     }
 
-    //checker om brugeren er fremmødt til studierådsmøde (er lig med 0 hvis str er ens)
-    if (strcasecmp($aktivitet, "studierådsmøde") == 0){
-        $user->fremmødt();
-    }else{
-        $user->addpoint($points, $aktivitet, $kommentar, $dato, $approved = $approved_status);
-        }
+    $user->addpoint($points, $aktivitet, $kommentar, $dato, $approved = $approved_status);
 
 }
 
