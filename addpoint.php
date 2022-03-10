@@ -263,7 +263,7 @@ if (isset($_POST['submit']) && ($_POST['submit'] == "Submit")  && ($CAPTCHA_succ
     $user = new bruger($studienr);
     $points = trim($points);
     if (! (is_numeric($points)) || $points <= 0){
-        exit("Error:non positive integer point value!");
+        exit("Error:non positive float point value!");
     }
 
     $user->addpoint($points, $aktivitet, $kommentar, $dato, $approved = $approved_status);
