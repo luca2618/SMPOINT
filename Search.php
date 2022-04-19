@@ -79,9 +79,8 @@ $konstituerede = fetch_konstituerede();
 if (isset($_GET['submit'])){
 switch ($_GET['submit']) {
   case "Search":
-
+    $studienr = mysqli_real_escape_string($db, $_GET['studienr']);
     echo("<div class=\"bluebox\">");
-    $studienr = $_GET['studienr'];
     echo("<text class=\"subtitle\"> ");
     $person = new bruger($studienr);
     $person->update_points();

@@ -11,6 +11,7 @@
 
         // clean data 
         $user_email = filter_var($email_signin, FILTER_SANITIZE_EMAIL);
+        $user_email = mysqli_real_escape_string($db, $user_email);
         $pswd = mysqli_real_escape_string($connection, $password_signin);
 
         // Query if email exists in db
