@@ -8,10 +8,10 @@ include("user_class.php");
 $today = date('Y/m/d');
 $return_besked = "";
 
-if (isset($_POST['submit'])){
+if (isset($_GET['submit'])){
 
-$studienr = $_POST['studienr'];
-$kode = $_POST['kode'];
+$studienr = $_GET['studienr'];
+$kode = $_GET['kode'];
 
     if (studienr_exists($studienr)){
         $today = mysqli_real_escape_string($db,$today);
@@ -48,7 +48,7 @@ $kode = $_POST['kode'];
 
 
 <div style="">
-<form action="" method="post" class="form">
+<form action="" method="get" class="form">
 <text class="title">Check ind</text>
 <br>
 <text class="subtitle">Skriv studienr og mødekode</text>
