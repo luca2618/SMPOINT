@@ -167,9 +167,11 @@ if (isset($_SESSION['role']) && $_SESSION['role']>1){
 
   if (isset($_POST['submit']) && ($_POST['submit'] == "Approve all")){
     approve_all();
+    update_all();
   }
   if (isset($_POST['submit']) && ($_POST['submit'] == "Disapprove all")){
     disapprove_all();
+    update_all();
   }
   
 

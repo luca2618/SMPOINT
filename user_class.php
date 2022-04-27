@@ -301,6 +301,19 @@ function fetch_aktivitetstype($print=false){
 
     }
 
+    //Det her lort er fucking ueffektivt, 
+    //så fucking ikke spam de lorte approve/disapprove all knapper
+    //eller have for mange medlemmer
+    //burde fikse relationen så det her ikke skal være så skide besværligt
+    function update_all(){
+        $konstituerede = fetch_konstituerede();
+            foreach($konstituerede as $konstitueret){
+                $studienr = $konstitueret['studienr'];
+                $medlem = new bruger($studienr);
+                $medlem->update_points();
+            }
+        }
+
 
 
 
