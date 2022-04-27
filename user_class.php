@@ -281,6 +281,25 @@ function fetch_aktivitetstype($print=false){
         return $data;
     }
     
+    function disapprove_all(){
+        // Forbinder til databasen.
+        include("./config/db_connect.php"); 
+        //checkf først om id'et af aktiviteten findes
+        $idsql = "DELETE FROM `aktiviteter` WHERE `approved`='0'";
+        $result = mysqli_query($db, $idsql);
+
+        return $result;
+    }
+    function approve_all(){
+        // Forbinder til databasen.
+        include("./config/db_connect.php"); 
+        //checkf først om id'et af aktiviteten findes
+        $idsql = "UPDATE `aktiviteter` SET `approved` = '1' WHERE `approved` = '0'";
+        $result = mysqli_query($db, $idsql);
+
+        return $result;
+
+    }
 
 
 

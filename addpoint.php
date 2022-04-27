@@ -145,16 +145,31 @@ if (isset($_SESSION['role']) && $_SESSION['role']>1){
  men som har fået defineret en anden point værdi. Kan selvfølgelig være af god grund 
  evt. beskrevet i kommentaren.</text>
  <br><br>
+ <form action="" method="post">
+      <input type="submit" value="Approve all" name="submit" class="submit" style="width:30%;">
+      <input type="submit" value="Disapprove all" name="submit" class="submit" style="width:30%;">
+  </form>
+
+
+ 
 <?php
   if (isset($_POST['submit']) && ($_POST['submit'] == "Approve")){
     $studienr = $_POST['studienr'];
     $medlem = new bruger($studienr);
     $medlem->approvepoint($_POST['pointid']);
   }
+
   if (isset($_POST['submit']) && ($_POST['submit'] == "Disapprove")){
     $studienr = $_POST['studienr'];
     $medlem = new bruger($studienr);
     $medlem->deletepoint($_POST['pointid']);
+  }
+
+  if (isset($_POST['submit']) && ($_POST['submit'] == "Approve all")){
+    approve_all();
+  }
+  if (isset($_POST['submit']) && ($_POST['submit'] == "Disapprove all")){
+    disapprove_all();
   }
   
 
