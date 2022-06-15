@@ -3,6 +3,7 @@ FROM ubuntu:latest
 # Use premade container with PHP
 FROM php:8.0-apache
 
+
 RUN apt-get update
 #RUN apt upgrade
 #install nano og mysqli
