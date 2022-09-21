@@ -236,8 +236,29 @@ if (isset($_SESSION['role']) && $_SESSION['role']>1){
         echo("</div></div>");
 }
 ?>
+<!--
+<div style="" class="column">
+    <form action="" method="post" class="form" enctype="multipart/form-data"  onsubmit="return confirm('THIS IS A MESS TO FIX IF YOU FUCK UP, ARE YOU SURE?');">>
+    <text class="title">Import aktivitetsliste</text>
+    <br>
+    <text class="formtekst">
+    Tager udgangspunkt i følgende skabelon: .<br>
+    aktivitetslisterne starter på række 2 og indeholder i rækkefølge:<br>
+    'Studienr' 'Aktivitet' 'Kommentar' 'Point' 'Dato'
+    <br></text>
+    <text class="subtitle">
+    <?php echo($tilføj_aktivitet_liste_message);?></text>
 
-
+    <div class="input-container ic1">
+    <label for="a_liste" class="subtitle">Aktivitetsliste:</label>
+    <input type="hidden" name="MAX_FILE_SIZE" value="30000" />
+    <input type="file" style="color:white" accept=".csv" id="a_liste" name="a_liste" required autocomplete="off" autofill="off" placeholder=" " autocomplete="off">
+    </div>
+    <div class="g-recaptcha" data-sitekey="6Lcnh7weAAAAAJPuuq1PhC31cFwUsTNlwqitBCXv"></div>
+    <input type="submit" value="Upload" name="submit" class="submit">
+    </form>
+</div>
+-->
 
 <?php
 //https://codeforgeek.com/google-recaptcha-tutorial/
@@ -284,6 +305,37 @@ if (isset($_POST['submit']) && ($_POST['submit'] == "Submit")  && ($CAPTCHA_succ
     }
     $user->addpoint($points, $aktivitet, $kommentar, $dato, $approved = $approved_status);
 
+}
+
+//for uploading document
+if (isset($_POST['submit']) && ($_POST['submit'] == "Upload")  && ($CAPTCHA_succes || (isset($_SESSION['role']) && $_SESSION['role']>1))){
+  $succes = 0;
+  $entries = 0;
+  $tmpName = $_FILES['a_liste']['tmp_name'];
+  $csvAsArray = array_map('str_getcsv', file($tmpName));
+  //Aktivitetslisterne starter på række 2 og indeholder i rækkefølge:
+  //'Fulde Navn', 'Studienr.', 'aktivitet', 'dato', 'kommentar', 'points'
+  for ($row = 1; $row<sizeof($csvAsArray); $row++){
+      $navn = $csvAsArray[$row][0];
+      $studienr = $csvAsArray[$row][1];
+      $aktivitet = $csvAsArray[$row][2];
+      $dato = $csvAsArray[$row][3];
+      //reformat to yyyy-mm-dd
+      $dato = str_replace('/', '-', $dato);
+      $dato = date ('Y-m-d', strtotime($dato));
+
+      $kommentar = $csvAsArray[$row][4];
+      $point = $csvAsArray[$row][5];
+      if (trim($navn) != ""){
+          if(studienr_exists($studienr)){
+              $konstitueret = new bruger($studienr);
+              $konstitueret->addpoint($point, $aktivitet, $kommentar, $dato);
+              $succes++;
+          }
+          $entries++;
+      }
+  }
+  $tilføj_aktivitet_liste_message = "Succes på ".$succes." ud af ".$entries;
 }
 
 ?>
