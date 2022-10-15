@@ -1,6 +1,5 @@
 <?php
 
-
 class bruger {
     public $id;
     public $studienr;
@@ -81,9 +80,11 @@ class bruger {
     }
 
     //Checker om brugeren har fremmødt
-    function fremmødt() {
+    function fremmødt($dato=false) {
+        if ($dato == false){
+            $dato = $today = date('Y-m-d');
+        }
         include("./config/db_connect.php"); // Forbinder til databasen.
-        $dato = date('Y-m-d');
         if (!$this->studienr_exists()){
             exit("Ikke konstitueret medlem");
         }

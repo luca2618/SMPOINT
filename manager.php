@@ -15,6 +15,7 @@ $delete_message = "";
 $tilføj_kostitueret_message = "";
 $møde_message = "";
 $opdater_værdi_message = "";
+$fremmødte_message = "";
 
 //variables for meeting form dates and stuff
 $today = date('Y-m-d');
@@ -111,7 +112,33 @@ if (isset($_SESSION['role']) && ($_SESSION['role']>1) && isset($_POST['submit'])
                         $opdater_værdi_message = "Studienr not found";
                     }
 
-                    break;
+                break;
+
+                case "Register fremmødte":
+                    $dato = $_POST['dato'];
+                    $dato = str_replace("-","/",$dato);
+
+                    console_log($_POST);
+                    $studie_numre = $_POST['studie_numre'];
+                    $studie_numre = explode(",", $studie_numre);
+                    $error_count = 0;
+
+                    foreach ($studie_numre as $studie_nr){
+                        $studie_nr = trim($studie_nr);
+                        if (studienr_exists($studie_nr)){
+                            $bruger = new bruger($studie_nr);
+                            $bruger->fremmødt($dato=$dato);
+                        } else {
+                            $fremmødte_message = $fremmødte_message."<br>".$studie_nr;
+                            $error_count = 0;
+                        }
+                    }
+
+                    $fremmødte_message = "Error on:". $fremmødte_message ;
+                        if ($error_count == 0){
+                            $fremmødte_message = "Succes on all";
+                        }
+                break;
     }
 }
 ?>
@@ -238,8 +265,32 @@ if (isset($_SESSION['role']) && ($_SESSION['role']>1) && isset($_POST['submit'])
     </form>
 </div>
 
-    <div style="" class="column">
+<div style="" class="column">
+    <form action="" method="post" class="form">
+        <text class="title">Register fremmødte</text>
+        <br>
+        <text class="subtitle">Studie nr. comma separeret</text><br>
+        <text class="subtitle"><?php echo($fremmødte_message);?></text>
+
+        <div class="input-container ic1">
+        <input type="date" id="dato" name="dato" required class="input" placeholder=" " 
+        <?php echo("value=\"$today\"
+        min=\"2000-01-01\" max=\"2025-12-31\"");?>><br><br>
+        <div class="cut"></div>
+        <label for="dato" class="placeholder">Dato:</label>
+        </div>
+
+        <div class="input-container ic1">
+        <input type="text" id="studie_numre" name="studie_numre" required autofill="off" class="input" placeholder=" " autocomplete="off">
+        <div class="cut"></div>
+        <label for="points" class="placeholder">studie numre:</label>
+        </div>
+
+        <input type="submit" value="Register fremmødte" name="submit" class="submit">
+
+        </form>
     </div>
+</div>
 
     <div style="" class="column">
     </div>

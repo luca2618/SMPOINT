@@ -48,8 +48,6 @@ CREATE TABLE `aktiviteter` (
     `approved` BOOLEAN,
     `dato` DATE NOT NULL);
 
-ALTER TABLE `aktiviteter` ADD `approved` BOOLEAN NOT NULL DEFAULT '1' AFTER `kommentar`;
-ALTER TABLE `aktiviteter` CHANGE `approved` `approved` BOOLEAN NULL DEFAULT '1';
 
 INSERT INTO `admins`( `name`, `email`, `role`, `password`, `date`) VALUES (
     'Lucas Sylvester',
