@@ -32,9 +32,8 @@ if (isset($_SESSION['role']) && ($_SESSION['role']>1) && isset($_POST['submit'])
             $studienr = $_POST['studienr'];
             $navn = $_POST['navn'];
             $email = $_POST['email'];
-            $telefonnr = $_POST['telefonnr'];
             
-            if (add_konstiueret($studienr, $navn, $email, $telefonnr)){
+            if (add_konstiueret($studienr, $navn, $email)){
                 $tilføj_kostitueret_message = "Succes";
             }else{
                 $tilføj_kostitueret_message = "Allerede registeret studienr";
@@ -221,12 +220,6 @@ if (isset($_SESSION['role']) && ($_SESSION['role']>1) && isset($_POST['submit'])
     <label for="email" class="placeholder">Email:</label>
     </div>
 
-    <div class="input-container ic1">
-    <input type="text" id="telefonnr" name="telefonnr" required autocomplete="off" autofill="off" class="input" placeholder=" ">
-    <div class="cut"></div>
-    <label for="telefonnr" class="placeholder">Telefon nr:</label>
-    </div>
-
     <input type="submit" value="Tilføj konstitueret" name="submit" class="submit">
     </form>
 </div>
@@ -252,7 +245,6 @@ if (isset($_SESSION['role']) && ($_SESSION['role']>1) && isset($_POST['submit'])
         <option value="studienr">Studienr</option>
         <option value="navn">Navn</option>
         <option value="email">Email</option>
-        <option value="telefonnr">Telefonnr</option>
         <option value="point">Point</option>
     </select>
     <div class="input-container ic1">

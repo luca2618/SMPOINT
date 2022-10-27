@@ -12,9 +12,8 @@ include("./navbar/Navbar.php"); // Indkluderer navbar.
 include("user_class.php");
 
 echo("<br><br>");
-fetch_leaderboard($print=true);
-
 update_all();
+fetch_leaderboard($print=true);
 
 
 ?>
