@@ -24,6 +24,11 @@ get('/kontakt','kontakt.php');
 
 any('/checkin', 'checkin.php');
 
+any('/aktivitetsliste_skabelon','skabeloner/aktivitetsliste_skabelon.csv');
+any('/aktivitetstype_skabelon','skabeloner/aktivitetstype_skabelon.csv');
+any('/tilmelding_skabelon','skabeloner/tilmelding_skabelon.csv');
+any('/modeliste_skabelon','skabeloner/mødeliste_skabelon.csv');
+
 //admin routes
 
 any('/login', 'user-authentication/login_page.php');

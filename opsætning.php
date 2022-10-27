@@ -30,22 +30,21 @@ if (isset($_SESSION['role']) && ($_SESSION['role']>1) && isset($_POST['submit'])
             $succes = 0;
             $entries = 0;
             $tmpName = $_FILES['k_liste']['tmp_name'];
-            $csvAsArray = array_map('str_getcsv', file($tmpName));
-            //konstitueringslisterne starter på række 6 og indeholder i rækkefølge:
+            $csvAsArray = csv_to_array($tmpName);
+            //konstitueringslisterne starter på række 1 og indeholder i rækkefølge:
             //'Fulde Navn', 'Studienr.', 'E-mail', 'Telefonnummer prefix(landkode)', 'Telefonnummer'
-            for ($row = 5; $row<sizeof($csvAsArray); $row++){
+            for ($row = 1; $row<sizeof($csvAsArray); $row++){
                 $navn = $csvAsArray[$row][0];
                 $studienr = $csvAsArray[$row][1];
                 $email = $csvAsArray[$row][2];
-                $telefonnr = $csvAsArray[$row][3].$csvAsArray[$row][4];
                 if (trim($navn) != ""){
-                    if(add_konstiueret($studienr, $navn, $email, $telefonnr)){
+                    if(add_konstiueret($studienr, $navn, $email)){
                         $succes++;
-                        console_log($navn);
                     }
                     $entries++;
                 }
             }
+            console_log($csvAsArray);
             $tilføj_kostitueret_liste_message = "Succes på ".$succes." ud af ".$entries.", allerede konstituerede medlemmer tæller ikke som succes";
             break;
 
@@ -53,28 +52,27 @@ if (isset($_SESSION['role']) && ($_SESSION['role']>1) && isset($_POST['submit'])
                 $succes = 0;
                 $entries = 0;
                 $tmpName = $_FILES['a_liste']['tmp_name'];
-                $csvAsArray = array_map('str_getcsv', file($tmpName));
+                $csvAsArray = csv_to_array($tmpName);
                 //Aktivitetslisterne starter på række 2 og indeholder i rækkefølge:
-                //'Fulde Navn', 'Studienr.', 'aktivitet', 'dato', 'kommentar', 'points'
+                //'Studienr.', 'aktivitet', 'dato', 'kommentar', 'points'
                 for ($row = 1; $row<sizeof($csvAsArray); $row++){
-                    $navn = $csvAsArray[$row][0];
-                    $studienr = $csvAsArray[$row][1];
-                    $aktivitet = $csvAsArray[$row][2];
-                    $dato = $csvAsArray[$row][3];
-                    //reformat to yyyy-mm-dd
+                    $studienr = $csvAsArray[$row][0];
+                    $aktivitet = $csvAsArray[$row][1];
+                    $dato = $csvAsArray[$row][2];
+                    //reformat to yyyy-mm-dd, should just be input with "-"
                     $dato = str_replace('/', '-', $dato);
                     $dato = date ('Y-m-d', strtotime($dato));
 
-                    $kommentar = $csvAsArray[$row][4];
-                    $point = $csvAsArray[$row][5];
-                    if (trim($navn) != ""){
-                        if(studienr_exists($studienr)){
-                            $konstitueret = new bruger($studienr);
-                            $konstitueret->addpoint($point, $aktivitet, $kommentar, $dato);
-                            $succes++;
-                        }
-                        $entries++;
+                    $kommentar = $csvAsArray[$row][3];
+                    $point = $csvAsArray[$row][4];
+                    
+                    if(studienr_exists($studienr)){
+                        $konstitueret = new bruger($studienr);
+                        $konstitueret->addpoint($point, $aktivitet, $kommentar, $dato);
+                        $succes++;
                     }
+                    $entries++;
+                    
                 }
                 $tilføj_aktivitet_liste_message = "Succes på ".$succes." ud af ".$entries;
                 break;
@@ -83,33 +81,27 @@ if (isset($_SESSION['role']) && ($_SESSION['role']>1) && isset($_POST['submit'])
                     $succes = 0;
                     $entries = 0;
                     $tmpName = $_FILES['møde_liste']['tmp_name'];
-                    $csvAsArray = array_map('str_getcsv', file($tmpName));
+                    $csvAsArray = csv_to_array($tmpName);
                     //konstitueringslisterne starter på række 2 og indeholder i rækkefølge:
-                    //'dato', 'Navn', 'Studienr.', 'retning', 'konstitueret(Ja/Nej)', 'random spørgsmål'
+                    //'Studienr.', 'dato'
                     for ($row = 1; $row<sizeof($csvAsArray); $row++){
-                        $dato = $csvAsArray[$row][0];
+                        $studienr = $csvAsArray[$row][0];
+                        $dato = $csvAsArray[$row][1];
                         
                         //$date format from the google forms include exact time so we just cut the date out
                         $dato = substr($dato, 0, -9);
                         //reformat to yyyy-mm-dd
                         $dato = str_replace('/', '-', $dato);
                         $dato = date ('Y-m-d', strtotime($dato));
-                        $navn = $csvAsArray[$row][1];
-                        $studienr = $csvAsArray[$row][2];
-                        $medlem =  $csvAsArray[$row][4];
-                        $aktivitet = "Studierådsmøde";
-                        $kommentar = "Fremmødt";
-                        $point = 1;
                         //check om personen siger de er medlem af rådet
-                        if ((trim($navn) != "")&&(strcasecmp($medlem,"Ja") == 0)){
-                            if(studienr_exists($studienr)){
-                                $konstitueret = new bruger($studienr);
-                                $konstitueret->addpoint($point, $aktivitet, $kommentar, $dato);
-                                $succes++;
-                            }
-                            $entries++;
-                            }
-                    }
+                        if(studienr_exists($studienr)){
+                            $konstitueret = new bruger($studienr);
+                            $konstitueret->fremmødt($dato=$dato);
+                            $succes++;
+                        }
+                        $entries++;
+                        }
+                    
                     $tilføj_møde_liste_message = "Succes på ".$succes." ud af ".$entries;
                     break;
 
@@ -118,7 +110,7 @@ if (isset($_SESSION['role']) && ($_SESSION['role']>1) && isset($_POST['submit'])
                         $succes = 0;
                         $entries = 0;
                         $tmpName = $_FILES['a_type_liste']['tmp_name'];
-                        $csvAsArray = array_map('str_getcsv', file($tmpName));
+                        $csvAsArray = csv_to_array($tmpName);
                         for ($row = 1; $row<sizeof($csvAsArray); $row++){
                             $aktivitet = $csvAsArray[$row][0];
                             //skifter fra komma seperation for decimaler til punktum.
@@ -163,9 +155,10 @@ if (isset($_SESSION['role']) && ($_SESSION['role']>1) && isset($_POST['submit'])
     <text class="title">Import konstitueret liste</text>
     <br>
     <text class="formtekst">
-    Tager udgangspunkt i formattering af listerne på drev.<br>
-    konstitueringslisterne starter på række 6 og indeholder i rækkefølge:<br>
-    'Fulde Navn', 'Studienr.', 'E-mail', 'Telefonnummer prefix(landkode)', 'Telefonnummer'<br>
+    Tager udgangspunkt i formattering på følgende skabelon:
+    <a href="/tilmelding_skabelon" download="tilmelding_skabelon.csv">
+    Skabelon - click her
+    </a>
     </text>
     <text class="subtitle">
     <?php echo($tilføj_kostitueret_liste_message);?></text>
@@ -190,10 +183,11 @@ if (isset($_SESSION['role']) && ($_SESSION['role']>1) && isset($_POST['submit'])
     <text class="title">Import aktivitetsliste</text>
     <br>
     <text class="formtekst">
-    Tager udgangspunkt i formattering af listerne på drev.<br>
-    aktivitetslisterne starter på række 2 og indeholder i rækkefølge:<br>
-    'Navn', 'Studienr.', 'aktivitet', 'dato', 'kommentar', 'points'<br>
-    Navn bruges ikke.</text>
+    Tager udgangspunkt i formattering på følgende skabelon:
+    <a href="/aktivitetsliste_skabelon" download="aktivitetsliste_skabelon.csv">
+    Skabelon - click her
+    </a>
+    </text>
     <text class="subtitle">
     <?php echo($tilføj_aktivitet_liste_message);?></text>
 
@@ -211,10 +205,10 @@ if (isset($_SESSION['role']) && ($_SESSION['role']>1) && isset($_POST['submit'])
     <text class="title">Import mødeliste</text>
     <br>
     <text class="formtekst">
-    Tager udgangspunkt i formattering af listerne på drev.<br>
-    mødelisterne starter på række 2 og indeholder i rækkefølge:<br>
-    'dato', 'Navn', 'Studienr.', 'retning', 'konstitueret(Ja/Nej)', 'random spørgsmål'<br>
-    Navn bruges ikke.</text>
+    Tager udgangspunkt i formattering på følgende skabelon:
+    <a href="/modeliste_skabelon" download="mødeliste_skabelon.csv">
+    Skabelon - click her
+    </a></text>
     <text class="subtitle">
     <?php echo($tilføj_møde_liste_message);?></text>
 
@@ -265,7 +259,10 @@ if (isset($_SESSION['role']) && ($_SESSION['role']>1) && isset($_POST['submit'])
 <div style="" class="column">
     <form action="" method="post" class="form" enctype="multipart/form-data">
     <text class="title">Import aktivitetstype liste</text><br>
-    <text class="subtitle">Læser fra række 1 og frem, ikke succes på allerede existrerende aktivitetstyper</text><br>
+    <text class="formtekst">    Tager udgangspunkt i formattering på følgende skabelon:
+    <a href="/aktivitetstype_skabelon" download="aktivitetstype_skabelon.csv">
+    Skabelon - click her
+    </a></text><br>
     <text class="subtitle"><?php echo($tilføj_aktivitet_option_message);?></text>
 
     <div class="input-container ic1">

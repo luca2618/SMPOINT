@@ -149,9 +149,10 @@ function studienr_exists($studienr){
     return true;
     }
 
-function add_konstiueret($studienr, $navn, $email, $telefonnr){
+function add_konstiueret($studienr, $navn, $email){
     include("./config/db_connect.php"); // Forbinder til databasen.
     //setup sql query
+    $telefonnr="";
     $sql = "INSERT INTO `medlemmer`( `studienr`, `navn`, `email`, `telefonnr`, `point`) VALUES (
         '$studienr',
         '$navn',
@@ -160,7 +161,7 @@ function add_konstiueret($studienr, $navn, $email, $telefonnr){
         '0'
     )";
     // check if the person already exists
-    if (studienr_exists($studienr)==false){
+    if ((studienr_exists($studienr)==false)&&($navn!="")&&($email!="")) {
         $result = mysqli_query($db, $sql);
         return true;
     }else{
@@ -314,6 +315,20 @@ function fetch_aktivitetstype($print=false){
                 $medlem->update_points();
             }
         }
+    
+    function csv_to_array($file_path){
+        $Data = [];
+        foreach(file($file_path) as $x){
+            if (substr_count($x,";")>substr_count($x,",")){
+                $Data[] = str_getcsv($x, ";"); //parse the rows
+            }else{
+                $Data[] = str_getcsv($x, ","); //parse the rows
+            }
+            
+        }
+        
+        return $Data;
+    }
 
 
 
