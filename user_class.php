@@ -163,8 +163,10 @@ function add_konstiueret($studienr, $navn, $email){
     )";
     // check if the person already exists
     if ((studienr_exists($studienr)==false)&&($navn!="")&&($email!="")) {
-        $result = mysqli_query($db, $sql);
-        return true;
+        if (mysqli_query($db, $sql)) {return true;
+        }else{
+            return false;
+        }
     }else{
         return false;
     }
