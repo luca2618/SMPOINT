@@ -187,7 +187,7 @@ function add_aktivitet_type($aktivitet, $point, $forklaring){
             VALUES ('$aktivitet', '$point', '$forklaring'); ";
         $result = mysqli_query($db, $sqli);
         console_log($result);
-        console_log(mysqli_error($db))
+        console_log(mysqli_error($db));
         return true;
         }
         return false;
