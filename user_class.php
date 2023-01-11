@@ -38,7 +38,7 @@ class bruger {
     //tilføjer point til brugeren
     function addpoint($points, $aktivitet, $kommentar, $dato, $approved = '1') {
         if ($aktivitet == "Studierådsmøde"){
-            fremmødt($dato=$dato);
+            $this->fremmødt($dato=$dato);
             return;
         }
         // Forbinder til databasen.
