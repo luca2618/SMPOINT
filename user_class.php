@@ -186,6 +186,7 @@ function add_aktivitet_type($aktivitet, $point, $forklaring){
         $sqli = "INSERT INTO  `aktivitet_typer` (`Aktivitet`, `Point`, `Forklaring`) 
             VALUES ('$aktivitet', '$point', '$forklaring'); ";
         $result = mysqli_query($db, $sqli);
+        console_log($result);
         return true;
         }
         return false;
