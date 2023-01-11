@@ -49,6 +49,7 @@ class bruger {
         VALUES ('$this->studienr', '$aktivitet', '$points', '$kommentar', '$approved' , '$dato')";
         $result = mysqli_query($db, $insertSQL);
         $this->update_points();
+        console_log($result);
     }
 
     function deletepoint($pointid){
@@ -186,8 +187,8 @@ function add_aktivitet_type($aktivitet, $point, $forklaring){
         $sqli = "INSERT INTO  `aktivitet_typer` (`Aktivitet`, `Point`, `Forklaring`) 
             VALUES ('$aktivitet', '$point', '$forklaring'); ";
         $result = mysqli_query($db, $sqli);
-        console_log($result);
-        console_log(mysqli_error($db));
+        #console_log($result);
+        #console_log(mysqli_error($db));
         return true;
         }
         return false;
