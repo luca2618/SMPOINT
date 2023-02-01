@@ -49,6 +49,7 @@ class bruger {
         VALUES ('$this->studienr', '$aktivitet', '$points', '$kommentar', '$approved' , '$dato')";
         $result = mysqli_query($db, $insertSQL);
         $this->update_points();
+        console_log($insertSQL);
         console_log($result);
     }
 
@@ -310,7 +311,6 @@ function fetch_aktivitetstype($print=false){
         $result = mysqli_query($db, $idsql);
 
         return $result;
-
     }
 
     //Det her lort er fucking ueffektivt, 
