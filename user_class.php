@@ -38,8 +38,8 @@ class bruger {
     //tilføjer point til brugeren
     function addpoint($points, $aktivitet, $kommentar, $dato, $approved = '1') {
         if ($aktivitet == "Studierådsmøde"){
-            $this->fremmødt($dato=$dato);
-            return;
+            if !$this->check_fremmødt($dato=$dato){
+                return
         }
         // Forbinder til databasen.
         include("./config/db_connect.php"); 
@@ -49,7 +49,6 @@ class bruger {
         VALUES ('$this->studienr', '$aktivitet', '$points', '$kommentar', '$approved' , '$dato')";
         $result = mysqli_query($db, $insertSQL);
         $this->update_points();
-        console_log($insertSQL);
         console_log($result);
     }
 
@@ -86,7 +85,7 @@ class bruger {
     }
 
     //Checker om brugeren har fremmødt
-    function fremmødt($dato=false) {
+    function check_fremmødt($dato=false) {
         if ($dato == false){
             $dato = $today = date('Y-m-d');
         }
@@ -99,13 +98,9 @@ class bruger {
         $result = mysqli_query($db, $sqli);
         $data= mysqli_fetch_array($result);
         if ($data == NULL){
-            $points = 1;
-            $kommentar = "Fremmødt";
-            $aktivitet = "Studierådsmøde";
-    
-            $this->addpoint($points, $aktivitet, $kommentar, $dato);
-            $this->update_points();
+            return true
             }
+        return false
     }
     
     //Opdaterer brugerens point
