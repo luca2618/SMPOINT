@@ -39,7 +39,8 @@ class bruger {
     function addpoint($points, $aktivitet, $kommentar, $dato, $approved = '1') {
         if ($aktivitet == "Studierådsmøde"){
             if ($this->check_fremmødt($dato=$dato) == false){
-                return
+                return false;
+            }
         }
         // Forbinder til databasen.
         include("./config/db_connect.php"); 
@@ -98,9 +99,9 @@ class bruger {
         $result = mysqli_query($db, $sqli);
         $data= mysqli_fetch_array($result);
         if ($data == NULL){
-            return true
+            return true;
             }
-        return false
+        return false;
     }
     
     //Opdaterer brugerens point
