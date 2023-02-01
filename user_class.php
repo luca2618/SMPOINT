@@ -104,6 +104,19 @@ class bruger {
             }
         return false;
     }
+
+    function fremmødt($dato=false){
+        if ($dato == false){
+            $dato = $today = date('Y-m-d');
+        }
+        $points = 1;
+        $kommentar = "Fremmødt";
+        $aktivitet = "Studierådsmøde";
+
+        $this->addpoint($points, $aktivitet, $kommentar, $dato);
+        $this->update_points();
+        return true
+    }
     
     //Opdaterer brugerens point
     function update_points(){

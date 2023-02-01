@@ -89,7 +89,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 </div>
 
 <div class="input-container ic1">
-    <input type="date" id="dato" name="dato" required class="input" placeholder=" " 
+    <input type="date" id="dato" name="dato" required class="input" placeholder=" " data-date-format="DD MMMM YYYY"
     <?php echo("value=\"$today\"
        min=\"2000-01-01\" max=\"2025-12-31\"");?>><br><br>
     <div class="cut"></div>
