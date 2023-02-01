@@ -87,12 +87,10 @@ if (isset($_SESSION['role']) && ($_SESSION['role']>1) && isset($_POST['submit'])
                     for ($row = 1; $row<sizeof($csvAsArray); $row++){
                         $studienr = $csvAsArray[$row][0];
                         $dato = $csvAsArray[$row][1];
-                        
-                        //$date format from the google forms include exact time so we just cut the date out
-                        $dato = substr($dato, 0, -9);
+                        console_log($dato);
                         //reformat to yyyy-mm-dd
-                        $dato = str_replace('/', '-', $dato);
                         $dato = date ('Y-m-d', strtotime($dato));
+                        console_log($dato);
                         //check om personen siger de er medlem af rådet
                         if(studienr_exists($studienr)){
                             $konstitueret = new bruger($studienr);

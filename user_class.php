@@ -39,7 +39,7 @@ class bruger {
     function addpoint($points, $aktivitet, $kommentar, $dato, $approved = '1') {
         if ($aktivitet == "Studierådsmøde"){
             if ($this->check_fremmødt($dato=$dato) == false){
-                console_log(str($this->navn)+" allerede registeret for møde");
+                console_log($this->navn . " allerede registeret for møde");
                 return false;
             }
         }
@@ -115,7 +115,7 @@ class bruger {
 
         $this->addpoint($points, $aktivitet, $kommentar, $dato);
         $this->update_points();
-        return true
+        return true;
     }
     
     //Opdaterer brugerens point
