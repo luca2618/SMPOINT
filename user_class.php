@@ -132,7 +132,7 @@ class bruger {
         { 
         $this->point = $row['total'];
         }
-        if ($result == false){
+        if ($this->point == NULL){
             $this->point = 0;
         }
 
