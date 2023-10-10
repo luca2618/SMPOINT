@@ -121,7 +121,7 @@ class bruger {
     //Opdaterer brugerens point
     function update_points(){
         include("./config/db_connect.php"); // Forbinder til databasen.
-        $legacy_date = '2023-09-01';
+        $legacy_date = '2024-09-01';
         $sql="SELECT sum(`point`) as total FROM `aktiviteter` WHERE studienr=('$this->studienr') AND approved=('1') AND dato >= '$legacy_date'";
 
         $result = mysqli_query($db, $sql);
