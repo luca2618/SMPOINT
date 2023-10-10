@@ -126,7 +126,6 @@ class bruger {
 
         $result = mysqli_query($db, $sql);
         console_log($this->studienr);
-        console_log( $row['total']);
 
         while ($row = mysqli_fetch_assoc($result))
         { 
@@ -135,7 +134,7 @@ class bruger {
         if ($this->point == NULL){
             $this->point = 0;
         }
-
+        console_log($this->point);
         $sqli = "UPDATE `medlemmer` SET `point`=('$this->point') WHERE studienr=('$this->studienr')";
         $result = mysqli_query($db, $sqli);
     }
