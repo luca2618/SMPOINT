@@ -125,11 +125,9 @@ class bruger {
         $sql="SELECT sum(`point`) as total FROM `aktiviteter` WHERE studienr=('$this->studienr') AND approved=('1') AND dato >= '$legacy_date'";
 
         $result = mysqli_query($db, $sql);
-        console_log($this->studienr);
 
         while ($row = mysqli_fetch_assoc($result))
         { 
-        console_log($row);
         $this->point = $row['total'];
         }
         if ($this->point == NULL){
