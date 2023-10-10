@@ -129,12 +129,13 @@ class bruger {
 
         while ($row = mysqli_fetch_assoc($result))
         { 
+        console_log($row);
         $this->point = $row['total'];
         }
         if ($this->point == NULL){
             $this->point = 0;
         }
-        console_log($this->point);
+    
         $sqli = "UPDATE `medlemmer` SET `point`=('$this->point') WHERE studienr=('$this->studienr')";
         $result = mysqli_query($db, $sqli);
     }
