@@ -126,7 +126,7 @@ class bruger {
 
         $result = mysqli_query($db, $sql);
         console_log($this->studienr);
-        console_log($result);
+        console_log( $row['total']);
 
         while ($row = mysqli_fetch_assoc($result))
         { 
