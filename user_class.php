@@ -8,6 +8,7 @@ class bruger {
     public $telefonnr;
     public $point;
     public $aktivitets_liste;
+    public $legacy_date
 
     // Klassens constructor.
     function __construct($studienr) {
@@ -26,8 +27,9 @@ class bruger {
         $this->navn = $data['navn'];
         $this->telefonnr = $data['telefonnr'];  
         $this->email = $data['email'];
+        $this->legacy_date = '2023-09-01';
 
-        $aktiviteter_sqli = "SELECT * FROM `aktiviteter` WHERE studienr=('$studienr') AND approved='1' ORDER BY dato DESC";
+        $aktiviteter_sqli = "SELECT * FROM `aktiviteter` WHERE studienr=('$studienr') AND approved='1' AND dato >= '$this->legacy_date' ORDER BY dato DESC";
         $aktiviteter_result = mysqli_query($db, $aktiviteter_sqli);
         while ($row = mysqli_fetch_assoc($aktiviteter_result)) {
             $this->aktivitets_liste[] = $row; // Inside while loop
@@ -121,8 +123,7 @@ class bruger {
     //Opdaterer brugerens point
     function update_points(){
         include("./config/db_connect.php"); // Forbinder til databasen.
-        $legacy_date = '2023-09-01';
-        $sql="SELECT sum(`point`) as total FROM `aktiviteter` WHERE studienr=('$this->studienr') AND approved=('1') AND dato >= '$legacy_date'";
+        $sql="SELECT sum(`point`) as total FROM `aktiviteter` WHERE studienr=('$this->studienr') AND approved=('1') AND dato >= '$this->legacy_date'";
 
         $result = mysqli_query($db, $sql);
 
