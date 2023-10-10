@@ -32,7 +32,7 @@ der er og hvem der udfører dem.
 <tekst>
 SM-KID point bestemmer den interne prioritering af årsfestbilleterne som rådet får tildelt.
 <br>
-Pointene bruges også til vurdere,
+Mere om point her
 </tekst>
 <br>
 
