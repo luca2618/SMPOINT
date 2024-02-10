@@ -142,7 +142,8 @@ if (isset($_SESSION['role']) && ($_SESSION['role']>1) && isset($_POST['submit'])
                 case "Update legacy date":
                     $dato = $_POST['dato'];
                     #$dato = str_replace("-","/",$dato);
-                    console_log($dato);
+                    #console_log($dato);
+                    console_log("Succes on true:")
                     console_log(update_legacy_date($dato));
                 break;
     }

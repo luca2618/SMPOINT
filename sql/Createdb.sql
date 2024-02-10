@@ -48,12 +48,12 @@ CREATE TABLE `aktiviteter` (
     `approved` BOOLEAN,
     `dato` DATE NOT NULL);
 
-CREATE TABLE Settings (
+CREATE TABLE settings (
     SettingKey VARCHAR(255) PRIMARY KEY,
     SettingValue VARCHAR(255)
 );
 
-INSERT INTO `Settings` (`SettingKey`, `SettingValue`) VALUES (
+INSERT INTO `settings` (`SettingKey`, `SettingValue`) VALUES (
     'legacy_date',
     '2002-01-24'
 );

@@ -389,7 +389,6 @@ function fetch_aktivitetstype($print=false){
         include("./config/db_connect.php"); 
         //checkf først om id'et af aktiviteten findes
         $idsql = "UPDATE `settings` SET `SettingValue` = '$date' WHERE `SettingKey` = 'legacy_date'";
-        console_log($idsql);
         $result = mysqli_query($db, $idsql);
 
         return $result;
