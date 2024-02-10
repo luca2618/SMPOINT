@@ -27,7 +27,13 @@ class bruger {
         $this->navn = $data['navn'];
         $this->telefonnr = $data['telefonnr'];  
         $this->email = $data['email'];
-        $this->legacy_date = '2023-09-01';
+
+
+        $sqli = "SELECT SettingValue FROM Settings WHERE SettingKey = 'legacy_date';";
+        $result = mysqli_query($db, $sqli);
+        $data= mysqli_fetch_array($result); 
+        $this->legacy_date = $data['SettingValue']; 
+        // $this->legacy_date = '2023-09-01';
 
         $aktiviteter_sqli = "SELECT * FROM `aktiviteter` WHERE studienr=('$studienr') AND approved='1' AND dato >= '$this->legacy_date' ORDER BY dato DESC";
         $aktiviteter_result = mysqli_query($db, $aktiviteter_sqli);
@@ -355,6 +361,14 @@ function fetch_aktivitetstype($print=false){
         return $Data;
     }
 
+    function update_legacy_date($date){
+        include("./config/db_connect.php"); 
+        //checkf først om id'et af aktiviteten findes
+        $idsql = "UPDATE `settings` SET `SettingValue` = '$date' WHERE `SettingKey` = 'legacy_date'";
+        $result = mysqli_query($db, $idsql);
+
+        return $result;
+    }
 
 
 

@@ -138,6 +138,13 @@ if (isset($_SESSION['role']) && ($_SESSION['role']>1) && isset($_POST['submit'])
                             $fremmødte_message = "Succes on all";
                         }
                 break;
+
+                case "Update legacy date":
+                    $dato = $_POST['dato'];
+                    #$dato = str_replace("-","/",$dato);
+                    console_log($dato);
+                    console_log(update_legacy_date($dato));
+                break;
     }
 }
 ?>
@@ -195,7 +202,7 @@ if (isset($_SESSION['role']) && ($_SESSION['role']>1) && isset($_POST['submit'])
     </form>
 </div>
 
-<!--Form for manually adding a missing konstitueret-->
+<!--Form for manually adding a manglende konstitueret-->
 <div style="" class="column">
     <form action="" method="post" class="form">
     <text class="title">Tilføj konstitueret</text>
@@ -280,12 +287,28 @@ if (isset($_SESSION['role']) && ($_SESSION['role']>1) && isset($_POST['submit'])
 
         <input type="submit" value="Register fremmødte" name="submit" class="submit">
 
-        </form>
-    </div>
+    </form>
 </div>
 
-    <div style="" class="column">
-    </div>
+<div style="" class="column">
+    <form action="" method="post" class="form">
+        <text class="title">Opdater legacy dato</text>
+        <br>
+        <text class="subtitle">Opdaterer datoen hvorfra point tælles</text><br>
+        <text class="subtitle"><?php echo($fremmødte_message);?></text>
+
+        <div class="input-container ic1">
+        <input type="date" id="dato" name="dato" required class="input" placeholder=" " 
+        <?php echo("value=\"$today\"
+        min=\"2000-01-01\" max=\"2025-12-31\"");?>><br><br>
+        <div class="cut"></div>
+        <label for="dato" class="placeholder">Dato:</label>
+        </div>
+
+        <input type="submit" value="Update legacy date" name="submit" class="submit">
+
+    </form>
+</div>
 
 </div>
 

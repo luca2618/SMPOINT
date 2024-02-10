@@ -48,6 +48,16 @@ CREATE TABLE `aktiviteter` (
     `approved` BOOLEAN,
     `dato` DATE NOT NULL);
 
+CREATE TABLE Settings (
+    SettingKey VARCHAR(255) PRIMARY KEY,
+    SettingValue VARCHAR(255)
+);
+
+INSERT INTO `Settings` (`SettingKey`, `SettingValue`) VALUES (
+    'legacy_date',
+    '24-12-2002'
+);
+
 
 INSERT INTO `admins`( `name`, `email`, `role`, `password`, `date`) VALUES (
     'Lucas Sylvester',
