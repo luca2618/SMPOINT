@@ -55,7 +55,7 @@ CREATE TABLE Settings (
 
 INSERT INTO `Settings` (`SettingKey`, `SettingValue`) VALUES (
     'legacy_date',
-    '24-12-2002'
+    '2002-01-24'
 );
 
 

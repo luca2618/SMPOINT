@@ -9,7 +9,7 @@ include("header.php");
 include("./navbar/Navbar.php"); // Indkluderer navbar.
 include("./config/db_connect.php");
 include("user_class.php");
-
+update_all();
 
 $delete_message = "";
 $tilføj_kostitueret_message = "";
