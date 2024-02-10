@@ -31,7 +31,7 @@ class bruger {
         $this->email = $data['email'];
 
 
-        $sqli = "SELECT SettingValue FROM Settings WHERE SettingKey = 'legacy_date';";
+        $sqli = "SELECT SettingValue FROM settings WHERE SettingKey = 'legacy_date';";
         $result = mysqli_query($db, $sqli);
         $data= mysqli_fetch_array($result); 
         $this->legacy_date = $data['SettingValue']; 
