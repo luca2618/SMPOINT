@@ -12,7 +12,7 @@ include("./navbar/Navbar.php"); // Indkluderer navbar.
 include("user_class.php");
 
 echo("<br><br>");
-update_all();
+#update_all();
 fetch_leaderboard($print=true);
 
 

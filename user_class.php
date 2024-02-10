@@ -152,8 +152,32 @@ class bruger {
         // mysqli_query returns true or false when trying to update value.
         $result = mysqli_query($db, $sqli);
         return $result;
+    }
 
+    function get_legacy_activities(){
+        include("./config/db_connect.php"); // Forbinder til databasen.
+        $aktiviteter_sqli = "SELECT * FROM `aktiviteter` WHERE studienr=('$this->studienr') AND approved='1' AND dato <= '$this->legacy_date' ORDER BY dato DESC";
+        $aktiviteter_result = mysqli_query($db, $aktiviteter_sqli);
+        while ($row = mysqli_fetch_assoc($aktiviteter_result)) {
+            $this->legacy_aktivitets_liste[] = $row; // Inside while loop
+         }
+         return $this->legacy_aktivitets_liste;
+    }
 
+    function get_legacy_points(){
+        include("./config/db_connect.php"); // Forbinder til databasen.
+        $sql="SELECT sum(`point`) as total FROM `aktiviteter` WHERE studienr=('$this->studienr') AND approved=('1') AND dato <= '$this->legacy_date'";
+
+        $result = mysqli_query($db, $sql);
+
+        while ($row = mysqli_fetch_assoc($result))
+        { 
+        $this->legacy_point = $row['total'];
+        }
+        if ($this->legacy_point == NULL){
+            $this->legacy_point = 0;
+        }
+        return $this->legacy_point;
     }
 
     function studienr_exists(){

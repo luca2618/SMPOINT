@@ -110,14 +110,65 @@ switch ($_GET['submit']) {
           echo ("<br><br><th>0 results</th><br>");
       }
       echo("</table>");
-      mysqli_close($db);
   
       break;
         
     }
 }
 ?>
-<div>
+
+</div> 
+
+
+<?php
+
+if (isset($_GET['submit'])){
+switch ($_GET['submit']) {
+  case "Search":
+    $studienr = mysqli_real_escape_string($db, $_GET['studienr']);
+    echo("<div class=\"bluebox\">");
+    $person = new bruger($studienr);
+    $person->update_points();
+    #get all aktivities by id ascending order
+    ?>
+    <!-- <text class="title"><#?php echo($person->navn); ?> </tekst><br> -->
+    <text class="title">Legacy points</tekst><br>
+    <text class="whitetekst">Legacy point er point du har opnået ud for det nuværende semester periode.<br>
+    De er det ultimative humble brag af alt det du har hjulpet med og gjort gennem tiden.<br>
+    Total antal point er dog mindre vigtige, da størrelsen af point har varieret en del gennem tiden. <br>
+    Stadig et kæmpe brag at have højest imho.<br>
+    </text>
+    <text class="subtitle">Total legacy points:<?php echo($person->get_legacy_points()); ?> </tekst><br><br>
+    <?php
+      $person->get_legacy_activities();
+      $result = $person->legacy_aktivitets_liste;
+      if ($result != null)  {
+          // output data of each row
+          echo("<table>
+          <tr>
+          <th>Point ID</th>
+          <th>Aktivitet</th>
+          <th>Point</th>
+          <th>Kommentar</th>
+          <th>Dato</th>
+          </tr>");
+          foreach ($result as $row) {
+              echo("<tr> <th>id: " . $row["id"]. "</th><th> " . $row["aktivitet"]. "</th><th>"
+              . $row["point"] . "</th><th>" . $row["kommentar"]. "</th><th>" . $row["dato"] . "</th></tr>");
+          }
+      } else {
+          echo ("<br><br><th>0 results</th><br>");
+      }
+      echo("</table>");
+      mysqli_close($db);
+  
+      break;  
+    }
+}
+?>
+
+
+</div> 
 
 
 
