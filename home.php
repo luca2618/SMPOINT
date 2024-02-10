@@ -28,7 +28,7 @@ SM/KID point er måden, vi her i rådet følger med i, hvilke frivillige opgaver
 Pointene er en måde at anerkende og belønne jeres indsats for at gøre SM/KID til et bedre studiemiljø og fællesskab.
 </tekst>
 
-<h3> Hvad kan jeg bruge SM-KID point til?</h3>
+<h2> Hvad kan jeg bruge SM-KID point til?</h3>
 <tekst>
 Hvad kan jeg bruge SM-KID point til? SM-KID point bestemmer 
 den interne prioritering af årsfestbilletterne, som rådet får tildelt. <br>
@@ -37,7 +37,7 @@ Jo flere point du har, jo større er din chance for at få en billet til den fes
 </tekst>
 <br>
 
-<h3> Hvordan får jeg SM-KID point?</h3>
+<h2> Hvordan får jeg SM-KID point?</h3>
 <tekst> Du får SM-KID point ved at udføre forskellige frivillige opgaver i SM-KID rådet 
 og ved at møde op til studierådsmøderne. <br>Nogle opgaver giver flere point end andre,
  afhængigt af deres sværhedsgrad, varighed og betydning. <br> Du kan også få bonuspoint for
