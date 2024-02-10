@@ -133,7 +133,7 @@ switch ($_GET['submit']) {
     ?>
     <!-- <text class="title"><#?php echo($person->navn); ?> </tekst><br> -->
     <text class="title">Legacy points</tekst><br>
-    <text class="whitetekst">Legacy point er point du har opnået ud for det nuværende semester periode.<br>
+    <text class="whitetekst">Legacy point er point du har opnået udenfor det nuværende semester periode.<br>
     De er det ultimative humble brag af alt det du har hjulpet med og gjort gennem tiden.<br>
     Total antal point er dog mindre vigtige, da størrelsen af point har varieret en del gennem tiden. <br>
     Stadig et kæmpe brag at have højest imho.<br>
