@@ -9,6 +9,8 @@ class bruger {
     public $point;
     public $aktivitets_liste;
     public $legacy_date;
+    public $legacy_aktivitets_liste;
+    public $legacy_point;
 
     // Klassens constructor.
     function __construct($studienr) {
