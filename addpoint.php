@@ -281,7 +281,7 @@ if(isset($_POST['g-recaptcha-response'])){
 // is used of studie nr is not set card_id - used to identify student/studentnr
 include("./config/db_connect.php");
 // the && only runs first check if its false therefore no problem with $_SESSION['role'] as its only reffered to if $_SESSION['role'] exists.
-console_log((isset($_POST['submit']) && ($_POST['submit'] == "Submit")  && ($CAPTCHA_succes || (isset($_SESSION['role']) && $_SESSION['role']>1))))
+console_log((isset($_POST['submit']) && ($_POST['submit'] == "Submit")  && ($CAPTCHA_succes || (isset($_SESSION['role']) && $_SESSION['role']>1))));
 if (isset($_POST['submit']) && ($_POST['submit'] == "Submit")  && ($CAPTCHA_succes || (isset($_SESSION['role']) && $_SESSION['role']>1))){
     if (isset($_POST['studienr'])){
         $studienr = $_POST['studienr'];
